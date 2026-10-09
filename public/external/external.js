@@ -13,15 +13,16 @@ const ui = {
   zoneName: new Map(),   // group id -> zone / scan list name
 };
 
-let repeaterGroupsLoaded = []; // from the user's RepeaterBook data (repeaters.js)
-const allGroups = () => [...EXTERNAL_GROUPS, ...TX_PRESET_GROUPS, ...repeaterGroupsLoaded];
+// Texas GMRS repeaters by region: built-in presets plus any pasted data (repeaters.js).
+let repeaterGroupsLoaded = repeaterGroups().groups;
+const allGroups = () => [...EXTERNAL_GROUPS, ...repeaterGroupsLoaded];
 
 function initGroupState(g) {
   ui.selected.set(g.id, new Set());
   ui.rxOnly.set(g.id, g.rxOnlyDefault);
   ui.zoneName.set(g.id, g.zone);
 }
-[...EXTERNAL_GROUPS, ...TX_PRESET_GROUPS].forEach(initGroupState);
+[...EXTERNAL_GROUPS, ...repeaterGroupsLoaded].forEach(initGroupState);
 
 const defaultItems = (g) => g.items.map((it, i) => (it.off ? -1 : i)).filter((i) => i >= 0);
 const txOf = (it) => it.tx ?? it.rx;
@@ -141,7 +142,7 @@ function toneText(it) {
 
 function render() {
   $('tree').replaceChildren(...EXTERNAL_GROUPS.map(renderGroup));
-  $('rbTree').replaceChildren(...[...TX_PRESET_GROUPS, ...repeaterGroupsLoaded].map(renderGroup));
+  $('rbTree').replaceChildren(...repeaterGroupsLoaded.map(renderGroup));
   renderTxMaster();
   updateSummary();
 }
@@ -295,20 +296,23 @@ function loadRepeaters(text, { quiet = false } = {}) {
     showMsg('rbMsg', "No GMRS repeaters found. Paste the table from RepeaterBook's Texas GMRS page, or a CHIRP CSV export.", 'error');
     return;
   }
-  // Drop state for previously loaded groups, then add the new ones.
-  for (const g of repeaterGroupsLoaded) { ui.selected.delete(g.id); ui.rxOnly.delete(g.id); ui.zoneName.delete(g.id); ui.expanded.delete(g.id); }
-  repeaterGroupsLoaded = repeaterGroups(rows);
-  repeaterGroupsLoaded.forEach(initGroupState);
-  // New groups follow the master "Allow transmit" choice.
+  // Rebuild the region groups, keeping each existing group's RX-only switch,
+  // zone name and expanded state (selections reset since the items change).
+  const res = repeaterGroups(rows);
   const anyTx = EXTERNAL_GROUPS.some((g) => !g.rxOnlyForced && !ui.rxOnly.get(g.id));
-  if (anyTx) repeaterGroupsLoaded.forEach((g) => ui.rxOnly.set(g.id, false));
+  for (const g of res.groups) {
+    const had = ui.rxOnly.has(g.id);
+    const keep = had && { rxOnly: ui.rxOnly.get(g.id), zone: ui.zoneName.get(g.id) };
+    initGroupState(g);
+    if (keep) { ui.rxOnly.set(g.id, keep.rxOnly); ui.zoneName.set(g.id, keep.zone); } else if (anyTx) ui.rxOnly.set(g.id, false);
+  }
+  repeaterGroupsLoaded = res.groups;
   try { if (text.trim()) localStorage.setItem(RB_STORE, text); else localStorage.removeItem(RB_STORE); } catch { /* storage unavailable */ }
-  $('rbCredit').hidden = !rows.length;
   $('rbClear').hidden = !rows.length;
   if (!quiet) {
     showMsg('rbMsg', rows.length
-      ? `Loaded ${plural(rows.length, 'repeater')} into ${plural(repeaterGroupsLoaded.length, 'region')}: `
-        + repeaterGroupsLoaded.map((g) => `${g.label.replace(/^GMRS /, '')} (${g.items.length})`).join(', ')
+      ? `Read ${plural(rows.length, 'repeater')}: ${res.added} new, ${res.skipped} already built in.`
+        + (res.added ? ' New ones are marked "from your data" in their region.' : '')
       : '', 'ok');
   }
   render();

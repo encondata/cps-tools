@@ -465,6 +465,8 @@ input:focus, select:focus { outline: 2px solid var(--focus); outline-offset: 0; 
 .ext-items .badge { margin-right: 4px; }
 .ext-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 16px; align-items: end; }
 .ext-footer { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+.ext-rb-update { margin: 4px 0 12px; }
+.ext-rb-update > summary { cursor: pointer; font-weight: 600; margin-bottom: 6px; }
 .ext-result { margin-top: 12px; padding: 12px 14px; border-radius: 8px; background: var(--ok-bg); }
 .ext-result h3 { margin: 0 0 6px; font-size: 15px; }
 .ext-result ul { margin: 0 0 8px; padding-left: 18px; }
