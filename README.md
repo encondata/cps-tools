@@ -86,15 +86,18 @@ RepeaterBook's terms don't allow its listings to be redistributed, so no repeate
 - **Table:** open RepeaterBook's [Texas GMRS repeater list](https://www.repeaterbook.com/gmrs/Display_SS.php?state_id=48), select the table from the header to the last row, copy, and paste it into **Texas GMRS repeaters**.
 - **CSV:** or open a CHIRP CSV export from RepeaterBook (GMRS exports need a free RepeaterBook account).
 
-**Built-in presets:** a **GMRS Texas presets** group is always available, even with no RepeaterBook data loaded. It holds repeaters whose details come from their owners:
-- **Dallas 600:** 462.600 / 467.600, PL 141.3. This is Dallas County REACT's "DCR Channel 3".
-- **Dallas 675:** 462.675 / 467.675, PL 141.3. This is Dallas County REACT's "DCR Channel 1".
+**Built-in presets:** preset groups are always available, even with no RepeaterBook data loaded. They hold repeaters whose details come from their owners. All use PL 141.3 both ways and the standard +5 MHz input.
 
-Both come from [dallasreact.org](https://www.dallasreact.org/communications).
+| Group | Zone | Repeaters | Source |
+| --- | --- | --- | --- |
+| GMRS DFW presets | GMRS DFW | Dallas 600 ("DCR Channel 3"), Dallas 675 ("DCR Channel 1") | [Dallas County REACT](https://www.dallasreact.org/communications) |
+| GMRS Houston presets | GMRS Houston | Texas City 550, Angleton 575, Alvin 600, Danbury 625, Santa Fe 725 | [Houston Amateur Mobile Society](https://www.qsl.net/hams/repeaters.html) |
 
-Presets import into the GMRS DFW zone:
+Each preset group imports into the same zone as that region's pasted repeaters:
 - **Same repeater:** if your pasted data lists one with the same output and tones, the pasted copy is skipped.
 - **Name clash:** other pasted repeaters that would get a preset's name are numbered instead ("Dallas 675 2").
+
+No Sugar Land / Fort Bend repeater owner publishes their details, so that region comes from your RepeaterBook data only. The Texas GMRS Network (Houston) gives its access tones only to registered licensees, so it isn't built in. Register at [texasgmrs.net](https://www.texasgmrs.net/) and add its repeaters in the Zone editor.
 
 Repeaters are sorted by county into regions. Each region becomes a tree group with its own zone and scan list:
 

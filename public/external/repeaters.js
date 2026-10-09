@@ -18,22 +18,46 @@ const RB_TX_URL = 'https://www.repeaterbook.com/gmrs/Display_SS.php?state_id=48'
 const GMRS_OUTPUTS = ['462.550', '462.575', '462.600', '462.625', '462.650', '462.675', '462.700', '462.725'];
 
 // Built-in repeaters, from their owners' own published details (not
-// RepeaterBook), shown even when no RepeaterBook data is loaded.
-const TX_PRESET_GROUPS = [{
-  id: 'txgmrs-presets',
-  label: 'GMRS Texas presets',
-  title: 'Well-known open repeaters',
-  zone: 'GMRS DFW',
-  rxOnlyDefault: true,
-  note: 'Built in, from each repeater owner\'s published details. Imports into the same zone as the DFW repeaters.',
-  source: { name: 'Dallas County REACT', url: 'https://www.dallasreact.org/communications' },
-  items: [
-    { name: 'Dallas 600', rx: 462.6, tx: 467.6, wide: true, txSq: 'TPL', txTone: '141.3', rxSq: 'TPL', rxTone: '141.3',
-      note: 'Dallas County REACT "DCR Channel 3" · downtown Dallas · PL 141.3' },
-    { name: 'Dallas 675', rx: 462.675, tx: 467.675, wide: true, txSq: 'TPL', txTone: '141.3', rxSq: 'TPL', rxTone: '141.3',
-      note: 'Dallas County REACT "DCR Channel 1" · PL 141.3' },
-  ],
-}];
+// RepeaterBook), shown even when no RepeaterBook data is loaded. Each group
+// imports into the same zone as that region's pasted repeaters.
+// All of these use PL 141.3 both ways and the standard +5 MHz input.
+const presetItem = (name, rx, note) => ({
+  name, rx, tx: Math.round((rx + 5) * 1e4) / 1e4, wide: true,
+  txSq: 'TPL', txTone: '141.3', rxSq: 'TPL', rxTone: '141.3', note: `${note} · PL 141.3`,
+});
+
+const TX_PRESET_GROUPS = [
+  {
+    id: 'txgmrs-presets-dfw',
+    label: 'GMRS DFW presets',
+    title: 'Dallas County REACT repeaters',
+    zone: 'GMRS DFW',
+    rxOnlyDefault: true,
+    note: 'Built in, from Dallas County REACT\'s published details. Imports into the same zone as the DFW repeaters.',
+    source: { name: 'Dallas County REACT', url: 'https://www.dallasreact.org/communications' },
+    items: [
+      presetItem('Dallas 600', 462.6, 'Dallas County REACT "DCR Channel 3" · downtown Dallas'),
+      presetItem('Dallas 675', 462.675, 'Dallas County REACT "DCR Channel 1"'),
+    ],
+  },
+  {
+    id: 'txgmrs-presets-houston',
+    label: 'GMRS Houston presets',
+    title: 'H.A.M.S. repeaters south and southeast of Houston',
+    zone: 'GMRS Houston',
+    rxOnlyDefault: true,
+    note: 'Built in, from the Houston Amateur Mobile Society\'s published details (page updated 01/29/26). '
+      + 'Imports into the same zone as the Houston repeaters.',
+    source: { name: 'H.A.M.S.', url: 'https://www.qsl.net/hams/repeaters.html' },
+    items: [
+      presetItem('Texas City 550', 462.55, 'H.A.M.S. · Texas City / Galveston · 150 ft · no emergency power'),
+      presetItem('Angleton 575', 462.575, 'H.A.M.S. · Angleton · 150 ft · emergency power'),
+      presetItem('Alvin 600', 462.6, 'H.A.M.S. · Alvin · 150 ft · no emergency power'),
+      presetItem('Danbury 625', 462.625, 'H.A.M.S. · Danbury · 200 ft · no emergency power'),
+      presetItem('Santa Fe 725', 462.725, 'H.A.M.S. · Santa Fe · 200 ft · no emergency power'),
+    ],
+  },
+];
 
 // Regions, in display order. A row goes to the first region whose county
 // list (or, when the data has no county, city list) matches.
