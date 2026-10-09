@@ -9,9 +9,13 @@
 #   ./install.sh                      interactive (asks for folder and port)
 #   ./install.sh -y                   use the defaults, no questions
 #   ./install.sh -d /srv/cps2 -p 9000 -y
-#   ./install.sh --repo https://github.com/<you>/cps2-tools.git
+#   ./install.sh --repo https://github.com/encondata/cps-tools.git
 #                                     download the code instead of using this folder
 #   ./install.sh --uninstall          remove the container and image (asks about data)
+#
+# It can also be piped straight from GitHub; it then downloads the code itself:
+#   curl -fsSL https://raw.githubusercontent.com/encondata/cps-tools/main/install.sh | bash
+#   curl -fsSL .../install.sh | bash -s -- -y -p 9000     (pass options after "-s --")
 #
 # Layout of the install folder:
 #   <dir>/app    the code the image is built from
@@ -27,6 +31,9 @@ DEFAULT_PORT="8734"
 CONTAINER_PORT="8080"
 APP_UID=1000            # the "node" user the container runs as
 BRANCH="main"
+# Where to download the code from when this script isn't run from the project
+# folder (e.g. piped from curl). Override with --repo or CPS2_REPO=...
+DEFAULT_REPO="${CPS2_REPO:-https://github.com/encondata/cps-tools.git}"
 
 INSTALL_DIR=""
 PORT=""
@@ -46,7 +53,7 @@ warn() { printf '%sWarning:%s %s\n' "$YELLOW" "$RESET" "$*" >&2; }
 die()  { printf '%sError:%s %s\n' "$RED" "$RESET" "$*" >&2; exit 1; }
 
 usage() {
-  sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'
+  if [[ -f $0 ]]; then sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//'; else printf 'CPS2 Tools installer\n\n'; fi
   cat <<EOF
 Options:
   -d, --dir DIR      install folder (default: $DEFAULT_DIR)
@@ -59,21 +66,30 @@ Options:
 EOF
 }
 
+# Answers come from the terminal, even when the script itself is piped in
+# (curl ... | bash uses stdin for the script). No terminal: use defaults.
+TTY=""
+if [[ -t 0 ]]; then
+  TTY=/dev/stdin
+elif { : </dev/tty; } 2>/dev/null; then
+  TTY=/dev/tty
+fi
+
 # Ask a question with a default; returns the default when not interactive.
 ask() {
   local prompt=$1 default=$2 reply
-  if (( ASSUME_YES )) || [[ ! -t 0 ]]; then
+  if (( ASSUME_YES )) || [[ -z $TTY ]]; then
     printf '%s\n' "$default"
     return
   fi
-  read -r -p "$prompt [$default]: " reply
+  read -r -p "$prompt [$default]: " reply <"$TTY"
   printf '%s\n' "${reply:-$default}"
 }
 
 confirm() {
   local prompt=$1 reply
-  if (( ASSUME_YES )) || [[ ! -t 0 ]]; then return 0; fi
-  read -r -p "$prompt [Y/n]: " reply
+  if (( ASSUME_YES )) || [[ -z $TTY ]]; then return 0; fi
+  read -r -p "$prompt [Y/n]: " reply <"$TTY"
   [[ -z $reply || $reply =~ ^[Yy] ]]
 }
 
@@ -123,8 +139,8 @@ if (( UNINSTALL )); then
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
   docker rmi "$IMAGE" >/dev/null 2>&1 || true
   if [[ -d $INSTALL_DIR ]]; then
-    if (( ! ASSUME_YES )) && [[ -t 0 ]]; then
-      read -r -p "Also delete $INSTALL_DIR, including the Library database? [y/N]: " reply
+    if (( ! ASSUME_YES )) && [[ -n $TTY ]]; then
+      read -r -p "Also delete $INSTALL_DIR, including the Library database? [y/N]: " reply <"$TTY"
       if [[ $reply =~ ^[Yy] ]]; then rm -rf -- "$INSTALL_DIR"; info "Deleted $INSTALL_DIR"; fi
     else
       info "Kept $INSTALL_DIR (Library data in $INSTALL_DIR/data)"
@@ -147,7 +163,18 @@ INSTALL_DIR=${INSTALL_DIR%/}
 
 APP_DIR="$INSTALL_DIR/app"
 DATA_DIR="$INSTALL_DIR/data"
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+# Folder this script is in, or empty when it was piped in (no file on disk).
+SCRIPT_DIR=""
+src=${BASH_SOURCE[0]:-}
+if [[ -n $src && -f $src ]]; then SCRIPT_DIR=$(cd -- "$(dirname -- "$src")" && pwd); fi
+LOCAL_SRC=0
+[[ -n $SCRIPT_DIR && -f $SCRIPT_DIR/Dockerfile && -d $SCRIPT_DIR/server && -d $SCRIPT_DIR/public ]] && LOCAL_SRC=1
+
+# Not run from the project folder: download the code.
+if [[ -z $REPO ]] && (( ! LOCAL_SRC )); then
+  REPO=$DEFAULT_REPO
+  [[ -n $REPO ]] || die "No code to install. Run this script from the project folder, or pass --repo <git url>."
+fi
 
 printf '  Install folder: %s\n  Web port:       %s\n  Library data:   %s\n\n' "$INSTALL_DIR" "$PORT" "$DATA_DIR"
 confirm "Continue?" || die "Cancelled."
@@ -172,7 +199,7 @@ if [[ -n $REPO ]]; then
     curl -fsSL "$url/archive/refs/heads/$BRANCH.tar.gz" | tar -xz -C "$STAGE" --strip-components=1 \
       || die "Download failed (a private repository needs git with credentials)."
   fi
-elif [[ -f $SCRIPT_DIR/Dockerfile && -d $SCRIPT_DIR/server && -d $SCRIPT_DIR/public ]]; then
+elif (( LOCAL_SRC )); then
   if [[ $(cd "$SCRIPT_DIR" && pwd -P) == $(mkdir -p "$APP_DIR" && cd "$APP_DIR" && pwd -P) ]]; then
     info "Using the code already in $APP_DIR"
     STAGE=""
@@ -183,8 +210,6 @@ elif [[ -f $SCRIPT_DIR/Dockerfile && -d $SCRIPT_DIR/server && -d $SCRIPT_DIR/pub
       [[ -e $SCRIPT_DIR/$item ]] && cp -R -- "$SCRIPT_DIR/$item" "$STAGE/"
     done
   fi
-else
-  die "Run this script from the project folder, or pass --repo <git url>."
 fi
 
 if [[ -n $STAGE ]]; then

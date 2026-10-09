@@ -37,7 +37,7 @@ It then builds the `cps2-tools` image, starts the container (restarting automati
 | --- | --- |
 | Install with defaults, no questions | `bash install.sh -y` |
 | Choose folder and port | `bash install.sh -d /mnt/user/appdata/cps2 -p 9000` |
-| Install or update straight from GitHub | `bash install.sh --repo https://github.com/<you>/cps2-tools.git` |
+| Install or update straight from GitHub | `bash install.sh --repo https://github.com/encondata/cps-tools.git` |
 | Update after changing the code | re-run `<install folder>/app/install.sh`. The Library data is kept |
 | Uninstall (asks before deleting data) | `bash <install folder>/app/install.sh --uninstall` |
 
