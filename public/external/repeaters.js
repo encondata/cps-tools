@@ -17,6 +17,22 @@
 const RB_TX_URL = 'https://www.repeaterbook.com/gmrs/Display_SS.php?state_id=48';
 const GMRS_OUTPUTS = ['462.550', '462.575', '462.600', '462.625', '462.650', '462.675', '462.700', '462.725'];
 
+// Built-in repeaters, from their owners' own published details (not
+// RepeaterBook), shown even when no RepeaterBook data is loaded.
+const TX_PRESET_GROUPS = [{
+  id: 'txgmrs-presets',
+  label: 'GMRS Texas presets',
+  title: 'Well-known open repeaters',
+  zone: 'GMRS DFW',
+  rxOnlyDefault: true,
+  note: 'Built in, from each repeater owner\'s published details. Imports into the same zone as the DFW repeaters.',
+  source: { name: 'Dallas County REACT', url: 'https://www.dallasreact.org/communications' },
+  items: [
+    { name: 'Dallas 600', rx: 462.6, tx: 467.6, wide: true, txSq: 'TPL', txTone: '141.3', rxSq: 'TPL', rxTone: '141.3',
+      note: 'Dallas County REACT "DCR Channel 3" · downtown Dallas · PL 141.3' },
+  ],
+}];
+
 // Regions, in display order. A row goes to the first region whose county
 // list (or, when the data has no county, city list) matches.
 const TX_REGIONS = [
@@ -194,7 +210,9 @@ function toneLabel(t) { return t && t !== 'CSQ' ? t : 'CSQ'; }
 // Parsed rows -> tree groups (same shape as EXTERNAL_GROUPS).
 function repeaterGroups(rows) {
   const byRegion = new Map(TX_REGIONS.map((g) => [g.id, []]));
+  const presets = new Set(TX_PRESET_GROUPS.flatMap((g) => g.items.map((it) => `${it.name}|${it.rx.toFixed(3)}`)));
   for (const r of rows) {
+    if (presets.has(`${repeaterName(r)}|${Number(r.freq).toFixed(3)}`)) continue; // already built in
     const up = parseTone(r.up), down = parseTone(r.down);
     const offAir = /off/i.test(r.status || '');
     const restricted = /CLOSED|PRIVATE/i.test(r.use || '');

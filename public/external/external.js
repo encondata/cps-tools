@@ -14,14 +14,14 @@ const ui = {
 };
 
 let repeaterGroupsLoaded = []; // from the user's RepeaterBook data (repeaters.js)
-const allGroups = () => [...EXTERNAL_GROUPS, ...repeaterGroupsLoaded];
+const allGroups = () => [...EXTERNAL_GROUPS, ...TX_PRESET_GROUPS, ...repeaterGroupsLoaded];
 
 function initGroupState(g) {
   ui.selected.set(g.id, new Set());
   ui.rxOnly.set(g.id, g.rxOnlyDefault);
   ui.zoneName.set(g.id, g.zone);
 }
-EXTERNAL_GROUPS.forEach(initGroupState);
+[...EXTERNAL_GROUPS, ...TX_PRESET_GROUPS].forEach(initGroupState);
 
 const defaultItems = (g) => g.items.map((it, i) => (it.off ? -1 : i)).filter((i) => i >= 0);
 const txOf = (it) => it.tx ?? it.rx;
@@ -141,7 +141,7 @@ function toneText(it) {
 
 function render() {
   $('tree').replaceChildren(...EXTERNAL_GROUPS.map(renderGroup));
-  $('rbTree').replaceChildren(...repeaterGroupsLoaded.map(renderGroup));
+  $('rbTree').replaceChildren(...[...TX_PRESET_GROUPS, ...repeaterGroupsLoaded].map(renderGroup));
   renderTxMaster();
   updateSummary();
 }
