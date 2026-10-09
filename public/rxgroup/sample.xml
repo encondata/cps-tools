@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<config>
+  <category name="DigitalRXGroupList">
+    <set name="DigitalRXGroupList" alias="List1">
+      <multifield name="DigitalRXGroupListItems">
+        <value>Call1</value>
+      </multifield>
+      <field name="RXTG_RXTGLISTALIAS">List1</field>
+      <field name="Comments"></field>
+    </set>
+  </category>
+</config>

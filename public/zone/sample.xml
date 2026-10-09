@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<config>
+  <category name="Zone">
+    <set name="Zone" alias="Retail - 1" key="NORMAL">
+      <collection name="ZoneItems">
+        <set name="ConventionalPersonality" alias="Best Buy - 1" key="ANLGCONV">
+          <field name="CP_SELECT5CHAN">False</field>
+          <field name="CP_PERSTYPE" Name="Analog">ANLGCONV</field>
+          <field name="CP_UTOSCANEN">True</field>
+          <field name="CP_TOCEN">True</field>
+          <field name="CP_RXONLYEN">False</field>
+          <field name="CP_RXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_RXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_TXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TALKAROUNDEN">False</field>
+          <field name="CP_VOXSTATE">False</field>
+          <field name="CP_EMPHASEL" Name="De &amp; Pre">DEEMPHPREEMPH</field>
+          <field name="CP_TOT">60</field>
+          <field name="CP_TOTWRN">4</field>
+          <field name="CP_AFCEN">1</field>
+          <field name="CP_REVBURST" Name="Standard">STANDARD</field>
+          <field name="CP_VOICELMT">2</field>
+          <field name="CP_DATALMT">3</field>
+          <field name="CP_SQCHCONT">-6</field>
+          <field name="CP_TXPWR" Name="High">HIGHPWR</field>
+          <field name="CP_CHASSGNTYPE" Name="Domestic">DOMESTIC</field>
+          <field name="CP_COMPSTATE">False</field>
+          <field name="CP_PLREQDATA">False</field>
+          <field name="CP_RXUNMUTE" Name="Data Or Squelch Or Selective Squelch">DATAORSQCHORSELSQCH</field>
+          <field name="CP_RXSIGTY" Name="LTD">LTD</field>
+          <field name="CP_SCANREMCARSQCH">False</field>
+          <field name="CP_TXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_TXFREQ">467.850000</field>
+          <field name="CP_RXFREQ">467.850000</field>
+          <field name="CP_TXDEV" Name="ID2PT5">ID2PT5</field>
+          <field name="CP_PLDEV">650</field>
+          <field name="CP_CHNLBWDTH" Name="12.5">STR_12PT5KHZ</field>
+          <field name="CP_TXTDPLCD">023</field>
+          <field name="CP_RXDPLCD">023</field>
+          <field name="CP_TXTTPLFREQ">67.0</field>
+          <field name="CP_RXTPLFREQ">67.0</field>
+          <field name="CP_RXDPLINV">False</field>
+          <field name="CP_TXDPLINV">False</field>
+          <field name="CP_USELD" Name="On">ON</field>
+          <field name="CP_XSQCHTY" Name="CSQ">CSQ</field>
+          <field name="CP_TXSQCHTY" Name="CSQ">CSQ</field>
+          <field name="CP_EMACKEN">False</field>
+          <field name="CP_EMACKALERTEN">True</field>
+          <field name="CP_EMALRMINDEN">False</field>
+          <field name="CP_EMCALINDEN">False</field>
+          <field name="CP_CNVPERSALIAS">Best Buy - 1</field>
+          <field name="CP_UNMUTETYPE" Name="Std Unmute, Mute">STDUNMUTESTDMUTE</field>
+          <field name="CP_TXINHXPLEN" Name="Channel Free">ONCHNNLFREE</field>
+          <field name="CP_BUSYLEDEN">True</field>
+          <field name="CP_RXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_RXSIGSQL" Name="OR">OR</field>
+          <field name="CP_TOTREKEYDELAY">0</field>
+          <field name="CP_EMERGENCY_CALL_DECODE_TONE_ENABLE">False</field>
+          <field name="CP_MTSTFCCTP1RSSITHRSHD_SUBS">-124</field>
+          <field name="CP_SCNROAMLISTIT" Name="ScanItems/RTL - Best Buy">ScanItems/RTL - Best Buy</field>
+          <field name="CP_LONEWORKEN">False</field>
+          <field name="CP_HCS" Name="None">NONE</field>
+          <field name="CP_RDIPCSINHSTT">False</field>
+          <field name="CP_SQUELCHPLUS" Name="Normal">NORMAL</field>
+          <field name="CP_LOIS">False</field>
+          <field name="CP_RPTACID">0</field>
+          <field name="CP_ARTSMODETYPE" Name="Disabled">STR_DISABLED</field>
+          <field name="CP_ARTSTXPRD" Name="25">ID25</field>
+          <field name="CP_CVFNLITEM" Name="None">NONE</field>
+          <field name="CP_ANALOGVOICESCRAMBLINGENABLE">False</field>
+          <field name="CP_OTAPHGHVLMDT">1400</field>
+          <field name="CP_OTAPIDCHNLSH">600</field>
+          <field name="CP_OTAPARSMNTFG">False</field>
+          <field name="CP_OTAPFSTTRDWD">240</field>
+          <field name="CP_OTAPTMDTIDCN">3000</field>
+          <field name="CP_OTAPLOWVLMCT">8</field>
+          <field name="CP_OTAPHIGHVLMCT">3</field>
+          <field name="CP_SARQ_AT">8</field>
+          <field name="CP_SARQ_WT">700</field>
+          <field name="CP_WAVEMODE" Name="WAVE_DISABLED">WAVE_DISABLED</field>
+          <field name="CP_LASTSELECTEDWAVECHANNEL">4294967295</field>
+          <field name="Comments"></field>
+          <field name="OffSet">0.000000</field>
+        </set>
+        <set name="ConventionalPersonality" alias="Best Buy - 2" key="ANLGCONV">
+          <field name="CP_SELECT5CHAN">False</field>
+          <field name="CP_PERSTYPE" Name="Analog">ANLGCONV</field>
+          <field name="CP_UTOSCANEN">True</field>
+          <field name="CP_TOCEN">True</field>
+          <field name="CP_RXONLYEN">False</field>
+          <field name="CP_RXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_RXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_TXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TALKAROUNDEN">False</field>
+          <field name="CP_VOXSTATE">False</field>
+          <field name="CP_EMPHASEL" Name="De &amp; Pre">DEEMPHPREEMPH</field>
+          <field name="CP_TOT">60</field>
+          <field name="CP_TOTWRN">4</field>
+          <field name="CP_AFCEN">1</field>
+          <field name="CP_REVBURST" Name="Standard">STANDARD</field>
+          <field name="CP_VOICELMT">2</field>
+          <field name="CP_DATALMT">3</field>
+          <field name="CP_SQCHCONT">-6</field>
+          <field name="CP_TXPWR" Name="High">HIGHPWR</field>
+          <field name="CP_CHASSGNTYPE" Name="Domestic">DOMESTIC</field>
+          <field name="CP_COMPSTATE">False</field>
+          <field name="CP_PLREQDATA">False</field>
+          <field name="CP_RXUNMUTE" Name="Data Or Squelch Or Selective Squelch">DATAORSQCHORSELSQCH</field>
+          <field name="CP_RXSIGTY" Name="LTD">LTD</field>
+          <field name="CP_SCANREMCARSQCH">False</field>
+          <field name="CP_TXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_TXFREQ">467.875000</field>
+          <field name="CP_RXFREQ">467.875000</field>
+          <field name="CP_TXDEV" Name="ID2PT5">ID2PT5</field>
+          <field name="CP_PLDEV">650</field>
+          <field name="CP_CHNLBWDTH" Name="12.5">STR_12PT5KHZ</field>
+          <field name="CP_TXTDPLCD">023</field>
+          <field name="CP_RXDPLCD">023</field>
+          <field name="CP_TXTTPLFREQ">67.0</field>
+          <field name="CP_RXTPLFREQ">67.0</field>
+          <field name="CP_RXDPLINV">False</field>
+          <field name="CP_TXDPLINV">False</field>
+          <field name="CP_USELD" Name="On">ON</field>
+          <field name="CP_XSQCHTY" Name="CSQ">CSQ</field>
+          <field name="CP_TXSQCHTY" Name="CSQ">CSQ</field>
+          <field name="CP_EMACKEN">False</field>
+          <field name="CP_EMACKALERTEN">True</field>
+          <field name="CP_EMALRMINDEN">False</field>
+          <field name="CP_EMCALINDEN">False</field>
+          <field name="CP_CNVPERSALIAS">Best Buy - 2</field>
+          <field name="CP_UNMUTETYPE" Name="Std Unmute, Mute">STDUNMUTESTDMUTE</field>
+          <field name="CP_TXINHXPLEN" Name="Channel Free">ONCHNNLFREE</field>
+          <field name="CP_BUSYLEDEN">True</field>
+          <field name="CP_RXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_RXSIGSQL" Name="OR">OR</field>
+          <field name="CP_TOTREKEYDELAY">0</field>
+          <field name="CP_EMERGENCY_CALL_DECODE_TONE_ENABLE">False</field>
+          <field name="CP_MTSTFCCTP1RSSITHRSHD_SUBS">-124</field>
+          <field name="CP_SCNROAMLISTIT" Name="ScanItems/RTL - Best Buy">ScanItems/RTL - Best Buy</field>
+          <field name="CP_LONEWORKEN">False</field>
+          <field name="CP_HCS" Name="None">NONE</field>
+          <field name="CP_RDIPCSINHSTT">False</field>
+          <field name="CP_SQUELCHPLUS" Name="Normal">NORMAL</field>
+          <field name="CP_LOIS">False</field>
+          <field name="CP_RPTACID">0</field>
+          <field name="CP_ARTSMODETYPE" Name="Disabled">STR_DISABLED</field>
+          <field name="CP_ARTSTXPRD" Name="25">ID25</field>
+          <field name="CP_CVFNLITEM" Name="None">NONE</field>
+          <field name="CP_ANALOGVOICESCRAMBLINGENABLE">False</field>
+          <field name="CP_OTAPHGHVLMDT">1400</field>
+          <field name="CP_OTAPIDCHNLSH">600</field>
+          <field name="CP_OTAPARSMNTFG">False</field>
+          <field name="CP_OTAPFSTTRDWD">240</field>
+          <field name="CP_OTAPTMDTIDCN">3000</field>
+          <field name="CP_OTAPLOWVLMCT">8</field>
+          <field name="CP_OTAPHIGHVLMCT">3</field>
+          <field name="CP_SARQ_AT">8</field>
+          <field name="CP_SARQ_WT">700</field>
+          <field name="CP_WAVEMODE" Name="WAVE_DISABLED">WAVE_DISABLED</field>
+          <field name="CP_LASTSELECTEDWAVECHANNEL">4294967295</field>
+          <field name="Comments"></field>
+          <field name="OffSet">0.000000</field>
+        </set>
+        <set name="ConventionalPersonality" alias="Best Buy - 3" key="ANLGCONV">
+          <field name="CP_SELECT5CHAN">False</field>
+          <field name="CP_PERSTYPE" Name="Analog">ANLGCONV</field>
+          <field name="CP_UTOSCANEN">True</field>
+          <field name="CP_TOCEN">True</field>
+          <field name="CP_RXONLYEN">False</field>
+          <field name="CP_RXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_RXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_TXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TALKAROUNDEN">False</field>
+          <field name="CP_VOXSTATE">False</field>
+          <field name="CP_EMPHASEL" Name="De &amp; Pre">DEEMPHPREEMPH</field>
+          <field name="CP_TOT">60</field>
+          <field name="CP_TOTWRN">4</field>
+          <field name="CP_AFCEN">1</field>
+          <field name="CP_REVBURST" Name="Standard">STANDARD</field>
+          <field name="CP_VOICELMT">2</field>
+          <field name="CP_DATALMT">3</field>
+          <field name="CP_SQCHCONT">-6</field>
+          <field name="CP_TXPWR" Name="High">HIGHPWR</field>
+          <field name="CP_CHASSGNTYPE" Name="Domestic">DOMESTIC</field>
+          <field name="CP_COMPSTATE">False</field>
+          <field name="CP_PLREQDATA">False</field>
+          <field name="CP_RXUNMUTE" Name="Data Or Squelch Or Selective Squelch">DATAORSQCHORSELSQCH</field>
+          <field name="CP_RXSIGTY" Name="LTD">LTD</field>
+          <field name="CP_SCANREMCARSQCH">False</field>
+          <field name="CP_TXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_TXFREQ">467.900000</field>
+          <field name="CP_RXFREQ">467.900000</field>
+          <field name="CP_TXDEV" Name="ID2PT5">ID2PT5</field>
+          <field name="CP_PLDEV">650</field>
+          <field name="CP_CHNLBWDTH" Name="12.5">STR_12PT5KHZ</field>
+          <field name="CP_TXTDPLCD">743</field>
+          <field name="CP_RXDPLCD">743</field>
+          <field name="CP_TXTTPLFREQ">67.0</field>
+          <field name="CP_RXTPLFREQ">67.0</field>
+          <field name="CP_RXDPLINV">False</field>
+          <field name="CP_TXDPLINV">False</field>
+          <field name="CP_USELD" Name="On">ON</field>
+          <field name="CP_XSQCHTY" Name="DPL">DPL</field>
+          <field name="CP_TXSQCHTY" Name="DPL">DPL</field>
+          <field name="CP_EMACKEN">False</field>
+          <field name="CP_EMACKALERTEN">True</field>
+          <field name="CP_EMALRMINDEN">False</field>
+          <field name="CP_EMCALINDEN">False</field>
+          <field name="CP_CNVPERSALIAS">Best Buy - 3</field>
+          <field name="CP_UNMUTETYPE" Name="Std Unmute, Mute">STDUNMUTESTDMUTE</field>
+          <field name="CP_TXINHXPLEN" Name="Channel Free">ONCHNNLFREE</field>
+          <field name="CP_BUSYLEDEN">True</field>
+          <field name="CP_RXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_RXSIGSQL" Name="OR">OR</field>
+          <field name="CP_TOTREKEYDELAY">0</field>
+          <field name="CP_EMERGENCY_CALL_DECODE_TONE_ENABLE">False</field>
+          <field name="CP_MTSTFCCTP1RSSITHRSHD_SUBS">-124</field>
+          <field name="CP_SCNROAMLISTIT" Name="ScanItems/RTL - Best Buy">ScanItems/RTL - Best Buy</field>
+          <field name="CP_LONEWORKEN">False</field>
+          <field name="CP_HCS" Name="None">NONE</field>
+          <field name="CP_RDIPCSINHSTT">False</field>
+          <field name="CP_SQUELCHPLUS" Name="Normal">NORMAL</field>
+          <field name="CP_LOIS">False</field>
+          <field name="CP_RPTACID">0</field>
+          <field name="CP_ARTSMODETYPE" Name="Disabled">STR_DISABLED</field>
+          <field name="CP_ARTSTXPRD" Name="25">ID25</field>
+          <field name="CP_CVFNLITEM" Name="None">NONE</field>
+          <field name="CP_ANALOGVOICESCRAMBLINGENABLE">False</field>
+          <field name="CP_OTAPHGHVLMDT">1400</field>
+          <field name="CP_OTAPIDCHNLSH">600</field>
+          <field name="CP_OTAPARSMNTFG">False</field>
+          <field name="CP_OTAPFSTTRDWD">240</field>
+          <field name="CP_OTAPTMDTIDCN">3000</field>
+          <field name="CP_OTAPLOWVLMCT">8</field>
+          <field name="CP_OTAPHIGHVLMCT">3</field>
+          <field name="CP_SARQ_AT">8</field>
+          <field name="CP_SARQ_WT">700</field>
+          <field name="CP_WAVEMODE" Name="WAVE_DISABLED">WAVE_DISABLED</field>
+          <field name="CP_LASTSELECTEDWAVECHANNEL">4294967295</field>
+          <field name="Comments"></field>
+          <field name="OffSet">0.000000</field>
+        </set>
+        <set name="ConventionalPersonality" alias="Best Buy - 4" key="ANLGCONV">
+          <field name="CP_SELECT5CHAN">False</field>
+          <field name="CP_PERSTYPE" Name="Analog">ANLGCONV</field>
+          <field name="CP_UTOSCANEN">True</field>
+          <field name="CP_TOCEN">True</field>
+          <field name="CP_RXONLYEN">False</field>
+          <field name="CP_RXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_RXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TXREFFREQ" Name="Default">DEFAULT</field>
+          <field name="CP_TXTPLCODE" Name="XZ">STR_XZ</field>
+          <field name="CP_TALKAROUNDEN">False</field>
+          <field name="CP_VOXSTATE">False</field>
+          <field name="CP_EMPHASEL" Name="De &amp; Pre">DEEMPHPREEMPH</field>
+          <field name="CP_TOT">60</field>
+          <field name="CP_TOTWRN">4</field>
+          <field name="CP_AFCEN">1</field>
+          <field name="CP_REVBURST" Name="Standard">STANDARD</field>
+          <field name="CP_VOICELMT">2</field>
+          <field name="CP_DATALMT">3</field>
+          <field name="CP_SQCHCONT">-6</field>
+          <field name="CP_TXPWR" Name="High">HIGHPWR</field>
+          <field name="CP_CHASSGNTYPE" Name="Domestic">DOMESTIC</field>
+          <field name="CP_COMPSTATE">False</field>
+          <field name="CP_PLREQDATA">False</field>
+          <field name="CP_RXUNMUTE" Name="Data Or Squelch Or Selective Squelch">DATAORSQCHORSELSQCH</field>
+          <field name="CP_RXSIGTY" Name="LTD">LTD</field>
+          <field name="CP_SCANREMCARSQCH">False</field>
+          <field name="CP_TXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_TXFREQ">467.925000</field>
+          <field name="CP_RXFREQ">467.925000</field>
+          <field name="CP_TXDEV" Name="ID2PT5">ID2PT5</field>
+          <field name="CP_PLDEV">650</field>
+          <field name="CP_CHNLBWDTH" Name="12.5">STR_12PT5KHZ</field>
+          <field name="CP_TXTDPLCD">506</field>
+          <field name="CP_RXDPLCD">506</field>
+          <field name="CP_TXTTPLFREQ">67.0</field>
+          <field name="CP_RXTPLFREQ">67.0</field>
+          <field name="CP_RXDPLINV">False</field>
+          <field name="CP_TXDPLINV">False</field>
+          <field name="CP_USELD" Name="On">ON</field>
+          <field name="CP_XSQCHTY" Name="DPL">DPL</field>
+          <field name="CP_TXSQCHTY" Name="DPL">DPL</field>
+          <field name="CP_EMACKEN">False</field>
+          <field name="CP_EMACKALERTEN">True</field>
+          <field name="CP_EMALRMINDEN">False</field>
+          <field name="CP_EMCALINDEN">False</field>
+          <field name="CP_CNVPERSALIAS">Best Buy - 4</field>
+          <field name="CP_UNMUTETYPE" Name="Std Unmute, Mute">STDUNMUTESTDMUTE</field>
+          <field name="CP_TXINHXPLEN" Name="Channel Free">ONCHNNLFREE</field>
+          <field name="CP_BUSYLEDEN">True</field>
+          <field name="CP_RXSIGSYSIT" Name="None">NONE</field>
+          <field name="CP_RXSIGSQL" Name="OR">OR</field>
+          <field name="CP_TOTREKEYDELAY">0</field>
+          <field name="CP_EMERGENCY_CALL_DECODE_TONE_ENABLE">False</field>
+          <field name="CP_MTSTFCCTP1RSSITHRSHD_SUBS">-124</field>
+          <field name="CP_SCNROAMLISTIT" Name="ScanItems/RTL - Best Buy">ScanItems/RTL - Best Buy</field>
+          <field name="CP_LONEWORKEN">False</field>
+          <field name="CP_HCS" Name="None">NONE</field>
+          <field name="CP_RDIPCSINHSTT">False</field>
+          <field name="CP_SQUELCHPLUS" Name="Normal">NORMAL</field>
+          <field name="CP_LOIS">False</field>
+          <field name="CP_RPTACID">0</field>
+          <field name="CP_ARTSMODETYPE" Name="Disabled">STR_DISABLED</field>
+          <field name="CP_ARTSTXPRD" Name="25">ID25</field>
+          <field name="CP_CVFNLITEM" Name="None">NONE</field>
+          <field name="CP_ANALOGVOICESCRAMBLINGENABLE">False</field>
+          <field name="CP_OTAPHGHVLMDT">1400</field>
+          <field name="CP_OTAPIDCHNLSH">600</field>
+          <field name="CP_OTAPARSMNTFG">False</field>
+          <field name="CP_OTAPFSTTRDWD">240</field>
+          <field name="CP_OTAPTMDTIDCN">3000</field>
+          <field name="CP_OTAPLOWVLMCT">8</field>
+          <field name="CP_OTAPHIGHVLMCT">3</field>
+          <field name="CP_SARQ_AT">8</field>
+          <field name="CP_SARQ_WT">700</field>
+          <field name="CP_WAVEMODE" Name="WAVE_DISABLED">WAVE_DISABLED</field>
+          <field name="CP_LASTSELECTEDWAVECHANNEL">4294967295</field>
+          <field name="Comments"></field>
+          <field name="OffSet">0.000000</field>
+        </set>
+      </collection>
+      <field name="ZP_ZONEALIAS">Retail - 1</field>
+      <field name="ZP_ZONETYPE" Name="Normal">NORMAL</field>
+      <field name="ZP_ZVFNLITEM" Name="None">NONE</field>
+      <field name="Comments"></field>
+    </set>
+  </category>
+</config>

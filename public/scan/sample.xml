@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<config>
+  <category name="ScanItems">
+    <set name="ScanItems" alias="RTL - Best Buy" key="CONVSCAN">
+      <field name="SP_TLKSCNEN">True</field>
+      <field name="SP_SCPLTYPE" Name="Priority and Non-Priority Channel">PRIORNONPRIORCHAN</field>
+      <field name="SP_PLLOCKCHMARKEN">True</field>
+      <field name="SP_DSGTXMEM_Zone" Name="None">NONE</field>
+      <field name="SP_DSGTXMEM" Name="Selected">SELECTED</field>
+      <field name="SC_SCANSIGHT">2000</field>
+      <field name="SCAN_RAD_TBPRIOSAMP">2000</field>
+      <multifield name="ScanListItems">
+        <value>Selected</value>
+        <value>Best Buy - 1</value>
+        <value>Best Buy - 2</value>
+        <value>Best Buy - 3</value>
+        <value>Best Buy - 4</value>
+      </multifield>
+      <field name="SP_PR1MEM" Name="None">NONE</field>
+      <field name="SP_PR2MEM" Name="None">NONE</field>
+      <field name="SP_SCANLISTALIAS">RTL - Best Buy</field>
+      <field name="SP_SCHSKIPCYCLE">0</field>
+      <field name="SP_SCLSTTYPE" Name="Scan List">CONVSCAN</field>
+      <field name="SP_RXUNCONFGRPDATAALLSCANMEMBERS">False</field>
+      <field name="SP_VOICESCANHANGTIME">True</field>
+      <field name="Comments"></field>
+    </set>
+    <set name="ScanItems" alias="Allen ISD" key="CONVSCAN">
+      <field name="SP_TLKSCNEN">True</field>
+      <field name="SP_SCPLTYPE" Name="Priority and Non-Priority Channel">PRIORNONPRIORCHAN</field>
+      <field name="SP_PLLOCKCHMARKEN">True</field>
+      <field name="SP_DSGTXMEM_Zone" Name="None">NONE</field>
+      <field name="SP_DSGTXMEM" Name="Selected">SELECTED</field>
+      <field name="SC_SCANSIGHT">2000</field>
+      <field name="SCAN_RAD_TBPRIOSAMP">2000</field>
+      <multifield name="ScanListItems">
+        <value>Selected</value>
+        <value>Allen HS Stadium</value>
+        <value>Allen ISD Buses</value>
+      </multifield>
+      <field name="SP_PR1MEM" Name="None">NONE</field>
+      <field name="SP_PR2MEM" Name="None">NONE</field>
+      <field name="SP_SCANLISTALIAS">Allen ISD</field>
+      <field name="SP_SCHSKIPCYCLE">0</field>
+      <field name="SP_SCLSTTYPE" Name="Scan List">CONVSCAN</field>
+      <field name="SP_RXUNCONFGRPDATAALLSCANMEMBERS">False</field>
+      <field name="SP_VOICESCANHANGTIME">True</field>
+      <field name="Comments"></field>
+    </set>
+  </category>
+</config>

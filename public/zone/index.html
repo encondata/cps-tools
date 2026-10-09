@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zone Editor · CPS2 Tools</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash. Light is the default.
+    try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}
+  </script>
+</head>
+<body data-page="zone" data-base="../">
+  <div class="page-title">
+    <h1>Zone Editor</h1>
+    <span class="sub">Paste a Zone from CPS2, edit its channels like a spreadsheet, and copy the result back.</span>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" role="tab" data-tab="inputPanel"><span class="step">1</span> Paste</button>
+    <button class="tab" role="tab" data-tab="editorPanel" disabled><span class="step">2</span> Edit</button>
+    <button class="tab" role="tab" data-tab="outputPanel" disabled><span class="step">3</span> Copy</button>
+  </nav>
+
+  <main>
+    <section class="panel" id="inputPanel" role="tabpanel">
+      <div class="panel-head">
+        <h2><span class="step">1</span> Paste Zone XML</h2>
+        <div class="actions">
+          <button id="newZoneStartBtn" class="ghost" title="Create an empty zone without pasting from CPS2">Start a new empty zone</button>
+          <button id="loadSampleBtn" class="ghost">Load sample</button>
+          <button id="clearInputBtn" class="ghost">Clear</button>
+          <button id="parseBtn" class="primary">Load into editor</button>
+        </div>
+      </div>
+      <textarea id="xmlInput" spellcheck="false" placeholder="Copy the Zone in CPS2, then paste the XML here (starts with &lt;?xml ... ?&gt; or &lt;config&gt;)"></textarea>
+      <div class="ws-row">
+        <span id="wsStatus" class="muted small"></span>
+        <label class="small"><input type="checkbox" id="replaceWs"> Replace what is in the workspace instead of merging</label>
+      </div>
+      <div id="inputMsg" class="msg" hidden></div>
+    </section>
+
+    <section class="panel" id="editorPanel" role="tabpanel" hidden>
+      <div class="panel-head">
+        <h2><span class="step">2</span> Edit Zone</h2>
+        <div class="actions">
+          <button id="resetBtn" class="ghost" title="Discard all edits and reload the pasted XML">Reset to pasted</button>
+          <button class="primary" data-goto="outputPanel">Next: Copy XML &rarr;</button>
+        </div>
+      </div>
+
+      <div id="zoneTabs" class="zone-tabs"></div>
+      <div id="zoneForm" class="zone-form"></div>
+
+      <div class="toolbar">
+        <div class="group">
+          <button id="addBtn" title="Add a new channel (copy of the last checked channel, or the last channel)">+ Add channel</button>
+          <button id="libAddBtn" title="Add channels from the central library">+ From Library</button>
+          <button id="dupBtn" title="Duplicate checked channels">Duplicate</button>
+          <button id="delBtn" class="danger" title="Delete checked channels">Delete</button>
+          <button id="upBtn" title="Move checked channels up">&uarr; Up</button>
+          <button id="downBtn" title="Move checked channels down">&darr; Down</button>
+          <div class="menu">
+            <button id="fnBtn" aria-haspopup="menu" aria-expanded="false">Functions &#9662;</button>
+            <div id="fnMenu" class="menu-list" role="menu" hidden>
+              <button role="menuitem" data-fn="rx2tx">Copy RX &rarr; TX Freq</button>
+              <button role="menuitem" data-fn="offset">Apply Offset&hellip;</button>
+              <hr>
+              <button role="menuitem" data-fn="makeScan">Create Scan List from Channels&hellip;</button>
+              <button role="menuitem" data-fn="setScan">Set Scan List&hellip;</button>
+              <hr>
+              <button role="menuitem" data-fn="saveLib">Save Channels to Library&hellip;</button>
+            </div>
+          </div>
+        </div>
+        <div class="group">
+          <label class="seg"><input type="radio" name="view" value="common" checked> Common fields</label>
+          <label class="seg"><input type="radio" name="view" value="all"> All fields</label>
+          <button id="copyTsvBtn" class="ghost" title="Copy the grid as tab-separated text to paste into Excel">Copy grid for Excel</button>
+        </div>
+      </div>
+
+      <div class="bulk">
+        <span class="bulk-label">Bulk set for checked rows:</span>
+        <select id="bulkCol"></select>
+        <span id="bulkValueHost"></span>
+        <button id="bulkApplyBtn">Apply</button>
+        <span class="hint">Tip: paste a block of cells from Excel into any cell — extra rows become new channels.</span>
+      </div>
+
+      <div id="warnings" class="warnings"></div>
+
+      <div class="grid-wrap">
+        <table id="grid" class="grid"></table>
+      </div>
+    </section>
+
+    <section class="panel" id="outputPanel" role="tabpanel" hidden>
+      <div class="panel-head">
+        <h2><span class="step">3</span> Copy XML back to CPS2</h2>
+        <div class="actions">
+          <button class="ghost" data-goto="editorPanel">&larr; Back to Edit</button>
+          <button id="downloadBtn" class="ghost">Download .xml</button>
+          <button id="copyBtn" class="primary">Copy XML</button>
+        </div>
+      </div>
+      <label class="small out-opt"><input type="checkbox" id="onlyZone" checked> Only the zone being edited (untick to copy every zone in the workspace)</label>
+      <textarea id="xmlOutput" spellcheck="false" readonly></textarea>
+    </section>
+  </main>
+
+  <script src="../common.js"></script>
+  <script src="../grid.js"></script>
+  <script src="../libclient.js"></script>
+  <script src="../templates.js"></script>
+  <script src="../builders.js"></script>
+  <script src="zone.js"></script>
+</body>
+</html>

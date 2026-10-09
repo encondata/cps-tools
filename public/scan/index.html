@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scan List Editor · CPS2 Tools</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash. Light is the default.
+    try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}
+  </script>
+</head>
+<body data-page="scan" data-base="../">
+  <div class="page-title">
+    <h1>Scan List Editor</h1>
+    <span class="sub">Paste Scan Lists from CPS2, edit their settings and member channels, and copy the result back.</span>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" role="tab" data-tab="inputPanel"><span class="step">1</span> Paste</button>
+    <button class="tab" role="tab" data-tab="editorPanel" disabled><span class="step">2</span> Edit</button>
+    <button class="tab" role="tab" data-tab="outputPanel" disabled><span class="step">3</span> Copy</button>
+  </nav>
+
+  <main>
+    <section class="panel" id="inputPanel" role="tabpanel">
+      <div class="panel-head">
+        <h2><span class="step">1</span> Paste Scan Lists XML</h2>
+        <div class="actions">
+          <button id="loadSampleBtn" class="ghost">Load sample</button>
+          <button id="clearInputBtn" class="ghost">Clear</button>
+          <button id="parseBtn" class="primary">Load into editor</button>
+        </div>
+      </div>
+      <textarea id="xmlInput" spellcheck="false" placeholder="Copy the Scan Lists in CPS2, then paste the XML here (starts with &lt;?xml ... ?&gt; or &lt;config&gt;)"></textarea>
+      <div class="ws-row">
+        <span id="wsStatus" class="muted small"></span>
+        <label class="small"><input type="checkbox" id="replaceWs"> Replace what is in the workspace instead of merging</label>
+      </div>
+      <div id="inputMsg" class="msg" hidden></div>
+    </section>
+
+    <section class="panel" id="editorPanel" role="tabpanel" hidden>
+      <div class="panel-head">
+        <h2><span class="step">2</span> Edit Scan Lists</h2>
+        <div class="actions">
+          <button id="resetBtn" class="ghost" title="Discard all edits and reload the pasted XML">Reset to pasted</button>
+          <button class="primary" data-goto="outputPanel">Next: Copy XML &rarr;</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="group">
+          <button id="addBtn" title="Add a new scan list">+ Add scan list</button>
+          <button id="dupBtn" title="Duplicate checked scan lists">Duplicate</button>
+          <button id="delBtn" class="danger" title="Delete checked scan lists">Delete</button>
+          <button id="upBtn" title="Move checked scan lists up">&uarr; Up</button>
+          <button id="downBtn" title="Move checked scan lists down">&darr; Down</button>
+        </div>
+        <div class="group">
+          <label class="seg"><input type="radio" name="view" value="common" checked> Common fields</label>
+          <label class="seg"><input type="radio" name="view" value="all"> All fields</label>
+          <button id="copyTsvBtn" class="ghost" title="Copy the grid as tab-separated text to paste into Excel">Copy grid for Excel</button>
+        </div>
+      </div>
+
+      <div class="bulk">
+        <span class="bulk-label">Bulk set for checked rows:</span>
+        <select id="bulkCol"></select>
+        <span id="bulkValueHost"></span>
+        <button id="bulkApplyBtn">Apply</button>
+        <span class="hint">Tip: paste a block of cells from Excel into any cell — extra rows become new scan lists.</span>
+      </div>
+
+      <div id="warnings" class="warnings"></div>
+
+      <div class="list-layout">
+        <div class="grid-wrap">
+          <table id="grid" class="grid"></table>
+        </div>
+
+        <aside class="members-panel">
+          <div class="members-head">
+            <h3 id="memTitle">Members</h3>
+            <div id="memActions" class="actions">
+              <button id="memPasteBtn" class="ghost" title="Paste or type a list of members, one per line">Paste list&hellip;</button>
+              <button id="memClearBtn" class="ghost danger">Remove all</button>
+            </div>
+          </div>
+          <p id="memHint" class="muted small"></p>
+          <div id="memList"></div>
+          <div id="memAdd" class="mem-add">
+            <input id="memAddInput" type="text" placeholder="Add a member&hellip;" autocomplete="off">
+            <button id="memAddBtn">Add</button>
+          </div>
+          <div id="memZone" class="mem-zone" hidden></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" id="outputPanel" role="tabpanel" hidden>
+      <div class="panel-head">
+        <h2><span class="step">3</span> Copy XML back to CPS2</h2>
+        <div class="actions">
+          <button class="ghost" data-goto="editorPanel">&larr; Back to Edit</button>
+          <button id="downloadBtn" class="ghost">Download .xml</button>
+          <button id="copyBtn" class="primary">Copy XML</button>
+        </div>
+      </div>
+      <textarea id="xmlOutput" spellcheck="false" readonly></textarea>
+    </section>
+  </main>
+
+  <dialog id="memPasteDialog" class="dialog">
+    <h3>Paste members</h3>
+    <p class="dialog-desc">One name per line. You can paste a column straight from Excel.</p>
+    <textarea id="memPasteText" spellcheck="false"></textarea>
+    <div class="dialog-actions">
+      <button type="button" id="memPasteCancel">Cancel</button>
+      <button type="button" id="memPasteAppend">Append</button>
+      <button type="button" id="memPasteReplace" class="primary">Replace list</button>
+    </div>
+  </dialog>
+
+  <script src="../common.js"></script>
+  <script src="../grid.js"></script>
+  <script src="../lists.js"></script>
+</body>
+</html>

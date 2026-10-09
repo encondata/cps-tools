@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<config>
+  <category name="PCRContacts">
+    <set name="PCRContacts" alias="Call1">
+      <field name="ContactName">Call1</field>
+      <collection name="MDCCalls">
+        <set name="MDCCalls" index="0" key="MDCGPCALL">
+          <field name="AU_CALLALIAS">Call1</field>
+          <field name="AU_CALLLSTID">57345</field>
+          <field name="AU_MDCSYS" Name="Sys1">Sys1</field>
+          <field name="AU_RVRTPERS_Zone" Name="None">NONE</field>
+          <field name="AU_RVRTPERS" Name="Selected">SELECTED</field>
+          <field name="AU_SPTPLDPL">False</field>
+          <field name="AU_CALLTYPE" Name="Group Call">MDCGPCALL</field>
+          <field name="AU_TONE" Name="Off">TURNOFF</field>
+          <field name="CallType">MDC Calls-Group Call</field>
+          <field name="PeudoCallId">57345</field>
+        </set>
+      </collection>
+      <collection name="QuikCallIICalls">
+        <set name="QuikCallIICalls" index="0">
+          <field name="QU_CALLENTRYALIAS">Call1</field>
+          <field name="QU_QCIISYS" Name="Sys1">Sys1</field>
+          <field name="QU_RVRTPERS_Zone" Name="None">NONE</field>
+          <field name="QU_RVRTPERS" Name="Selected">SELECTED</field>
+          <field name="QU_CALLFORMAT" Name="Two Tone">TWO_TONE</field>
+          <field name="QU_TONEATXFRE">288.5</field>
+          <field name="QU_CODEA" Name="138">STR_138</field>
+          <field name="QU_TONEBTXFRE">288.5</field>
+          <field name="QU_CODEB" Name="138">STR_138</field>
+          <field name="QU_STRIPPLDPL">False</field>
+          <field name="CallType">Quik-Call II</field>
+          <field name="PeudoCallId" Name="138">STR_138</field>
+        </set>
+      </collection>
+      <collection name="DigitalCalls">
+        <set name="DigitalCalls" index="0" key="GRPCALL">
+          <field name="DU_CALLALIAS">Call1</field>
+          <field name="DU_CALLLSTID">1</field>
+          <field name="DU_CALLPRCDTNEN">False</field>
+          <field name="DU_RINGTYPE" Name="No Style">NOSTYLE</field>
+          <field name="DU_TXTMSGALTTNTP" Name="Repetitive">REPETITIVE</field>
+          <field name="DU_CALLTYPE" Name="Group Call">GRPCALL</field>
+          <field name="DU_CALLTYPEPART2">0</field>
+          <field name="DU_UKPOTCFLG">False</field>
+          <field name="DU_RVRTPERS_Zone" Name="None">NONE</field>
+          <field name="DU_RVRTPERS" Name="Selected">SELECTED</field>
+          <field name="CallType">Digital Calls-Group Call</field>
+          <field name="PeudoCallId">1</field>
+        </set>
+      </collection>
+      <field name="Comments"></field>
+    </set>
+    <set name="PCRContacts" alias="Allen HS Stadium">
+      <field name="ContactName">Allen HS Stadium</field>
+      <collection name="MDCCalls" />
+      <collection name="QuikCallIICalls" />
+      <collection name="DigitalCalls">
+        <set name="DigitalCalls" index="0" key="GRPCALL">
+          <field name="DU_CALLALIAS">Allen HS Stadium</field>
+          <field name="DU_CALLLSTID">1</field>
+          <field name="DU_CALLPRCDTNEN">False</field>
+          <field name="DU_RINGTYPE" Name="No Style">NOSTYLE</field>
+          <field name="DU_TXTMSGALTTNTP" Name="Repetitive">REPETITIVE</field>
+          <field name="DU_CALLTYPE" Name="Group Call">GRPCALL</field>
+          <field name="DU_CALLTYPEPART2">0</field>
+          <field name="DU_UKPOTCFLG">False</field>
+          <field name="DU_RVRTPERS_Zone" Name="None">NONE</field>
+          <field name="DU_RVRTPERS" Name="Selected">SELECTED</field>
+          <field name="CallType">Digital Calls-Group Call</field>
+          <field name="PeudoCallId">1</field>
+        </set>
+      </collection>
+      <field name="Comments"></field>
+    </set>
+    <set name="PCRContacts" alias="Allen School Bus">
+      <field name="ContactName">Allen School Bus</field>
+      <collection name="MDCCalls" />
+      <collection name="QuikCallIICalls" />
+      <collection name="DigitalCalls">
+        <set name="DigitalCalls" index="0" key="GRPCALL">
+          <field name="DU_CALLALIAS">Allen School Bus</field>
+          <field name="DU_CALLLSTID">1</field>
+          <field name="DU_CALLPRCDTNEN">False</field>
+          <field name="DU_RINGTYPE" Name="No Style">NOSTYLE</field>
+          <field name="DU_TXTMSGALTTNTP" Name="Repetitive">REPETITIVE</field>
+          <field name="DU_CALLTYPE" Name="Group Call">GRPCALL</field>
+          <field name="DU_CALLTYPEPART2">0</field>
+          <field name="DU_UKPOTCFLG">False</field>
+          <field name="DU_RVRTPERS_Zone" Name="None">NONE</field>
+          <field name="DU_RVRTPERS" Name="Selected">SELECTED</field>
+          <field name="CallType">Digital Calls-Group Call</field>
+          <field name="PeudoCallId">1</field>
+        </set>
+      </collection>
+      <field name="Comments"></field>
+    </set>
+  </category>
+</config>

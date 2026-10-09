@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Load from External · CPS2 Tools</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash. Light is the default.
+    try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}
+  </script>
+</head>
+<body data-page="external" data-base="../">
+  <div class="page-title">
+    <h1>Load from External</h1>
+    <span class="sub">Pick channels from preconfigured lists. Importing creates a zone and scan list for each group in your workspace.</span>
+  </div>
+
+  <main class="external">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Preconfigured channels</h2>
+        <div class="actions">
+          <button id="expandAll" class="ghost">Expand all</button>
+          <button id="collapseAll" class="ghost">Collapse all</button>
+          <button id="selectAll" class="ghost">Select all</button>
+          <button id="selectNone" class="ghost">Clear</button>
+        </div>
+      </div>
+      <div class="msg ext-legal">
+        <strong>Receive only by default.</strong> FRS, GMRS, MURS and Marine each require radios certified for that service before
+        they may transmit, and GMRS also needs an FCC licence. MOTOTRBO business radios generally aren't, so channels import as
+        receive-only unless you untick <em>RX only</em> on a group, or tick <em>Allow transmit</em> under Import options.
+        Weather, and the government-only and data-only marine channels, are always receive-only.
+      </div>
+      <div id="tree" class="ext-tree"></div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">Import options</h2>
+      <div class="ext-options">
+        <div class="ext-tx">
+          <label class="dialog-check"><input id="optAllowTx" type="checkbox"> <span><strong>Allow transmit</strong> — import TX frequencies for FRS, GMRS, MURS and Marine</span></label>
+          <span id="txState" class="muted small"></span>
+        </div>
+        <label class="dialog-check"><input id="optAutoScan" type="checkbox" checked> <span>Turn on Auto Scan for the imported channels</span></label>
+        <label class="dialog-check"><input id="optLibrary" type="checkbox"> <span>Also save the channels to the Library</span></label>
+        <label class="dialog-field"><span>Max scan list members (including "Selected")</span><input id="optScanMax" type="number" min="2" max="64" value="16"></label>
+        <label class="dialog-field"><span>Channel template</span><select id="optTemplate"></select></label>
+      </div>
+      <p class="muted small">Each group becomes a zone named as shown, and a scan list with the same name. Larger groups are split
+        into numbered scan lists ("Marine", "Marine 2", …). If the zone already exists in your workspace, channels with the same
+        name are replaced and new ones are added.</p>
+      <div class="ext-footer">
+        <span id="summary" class="muted"></span>
+        <button id="importBtn" class="primary" disabled>Import</button>
+      </div>
+      <div id="result" class="ext-result" hidden></div>
+    </section>
+  </main>
+
+  <script src="../common.js"></script>
+  <script src="../grid.js"></script>
+  <script src="../libclient.js"></script>
+  <script src="../templates.js"></script>
+  <script src="../rrimport.js"></script>
+  <script src="../builders.js"></script>
+  <script src="data.js"></script>
+  <script src="external.js"></script>
+</body>
+</html>

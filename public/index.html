@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CPS2 Tools</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash. Light is the default.
+    try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}
+  </script>
+</head>
+<body data-page="home">
+  <main class="home">
+    <section class="hero">
+      <h1>CPS2 Tools</h1>
+      <p>Bulk-edit MOTOTRBO codeplug data that CPS2 can't import or export. Copy an item in CPS2, paste its XML
+        into an editor, change it like a spreadsheet, then copy the new XML and paste it back into CPS2.</p>
+    </section>
+
+    <div id="cards" class="cards"></div>
+
+    <section class="how">
+      <h2>How it works</h2>
+      <ol>
+        <li><strong>Paste</strong> — in CPS2, copy the Zones, Scan Lists, RX Group Lists and Contacts, and paste the XML on the Setup page (or into an editor). It's kept in this browser's workspace.</li>
+        <li><strong>Edit</strong> — change values in the grid, paste blocks from Excel, add, duplicate, reorder or delete rows.</li>
+        <li><strong>Copy</strong> — copy the generated XML and paste it back into CPS2. The Setup page shows which parts changed.</li>
+      </ol>
+      <p class="muted small">Everything runs in your browser. Nothing you paste is sent to the server.</p>
+    </section>
+  </main>
+
+  <script src="common.js"></script>
+  <script>
+    initShell();
+    const loaded = PAGES.filter((p) => Workspace.has(p.id)).map((p) => p.label);
+    $('cards').replaceChildren(
+      h('a', { class: 'card setup-card', href: 'setup/' },
+        h('h2', {}, 'Setup'),
+        h('p', {}, 'Paste your Zones, Scan Lists, RX Group Lists and Contacts once so the editors can work with them together.'),
+        h('p', { class: 'muted small' }, loaded.length ? `Workspace: ${loaded.join(', ')}` : 'Workspace is empty.'),
+        h('span', { class: 'card-go' }, 'Open setup →')),
+      h('a', { class: 'card setup-card', href: 'library/' },
+        h('h2', {}, 'Library'),
+        h('p', {}, 'A central list of channels and contacts on this server. Pick from it to set up any radio.'),
+        h('span', { class: 'card-go' }, 'Open library →')),
+      h('a', { class: 'card setup-card', href: 'external/' },
+        h('h2', {}, 'Load from External'),
+        h('p', {}, 'Add FRS, GMRS, MURS, Marine and NOAA Weather channels, each with its own zone and scan list.'),
+        h('span', { class: 'card-go' }, 'Open →')),
+      ...PAGES.map((p) => h('a', { class: 'card', href: p.path },
+        h('h2', {}, p.label), h('p', {}, p.desc), h('span', { class: 'card-go' }, 'Open editor →'))));
+  </script>
+</body>
+</html>

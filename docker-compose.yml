@@ -1,0 +1,13 @@
+services:
+  cps2-zone-editor:
+    build: .
+    image: cps2-zone-editor:latest
+    container_name: cps2-zone-editor
+    ports:
+      - "5974:8080"
+    volumes:
+      - cps2-library:/data   # the channel/contact library database
+    restart: unless-stopped
+
+volumes:
+  cps2-library:

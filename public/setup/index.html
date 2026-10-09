@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Setup · CPS2 Tools</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash. Light is the default.
+    try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}
+  </script>
+</head>
+<body data-page="setup" data-base="../">
+  <div class="page-title">
+    <h1>Setup</h1>
+    <span class="sub">Load your codeplug's Zones, Scan Lists, RX Group Lists and Contacts once, and every editor can use them together.</span>
+  </div>
+
+  <main class="setup">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Paste CPS2 XML</h2>
+        <div class="actions">
+          <button id="setupClearInput" class="ghost">Clear</button>
+          <button id="setupAdd" class="primary">Add to workspace</button>
+        </div>
+      </div>
+      <p class="muted small">Paste any Zone, Scan List, RX Group List or Contacts XML copied from CPS2. The type is detected automatically.
+        Items are merged by name, so you can paste zones one at a time.</p>
+      <textarea id="setupInput" spellcheck="false" placeholder="Paste XML copied from CPS2 here…"></textarea>
+      <div class="ws-row">
+        <span id="storageStatus" class="muted small"></span>
+        <label class="small"><input type="checkbox" id="setupReplace"> Replace instead of merging</label>
+      </div>
+      <div id="setupMsg" class="msg" hidden></div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Workspace</h2>
+      <div id="wsCards" class="ws-cards"></div>
+    </section>
+
+    <section class="panel ws-tools">
+      <div>
+        <h2>Backup</h2>
+        <p class="muted small">The workspace lives in this browser only. Export it to move it to another PC or keep a copy.</p>
+      </div>
+      <div class="actions">
+        <button id="exportBtn" class="ghost">Export workspace</button>
+        <label class="button ghost">Import workspace<input id="importFile" type="file" accept=".json,application/json" hidden></label>
+        <button id="clearAllBtn" class="ghost danger">Clear everything</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="../common.js"></script>
+  <script src="setup.js"></script>
+</body>
+</html>

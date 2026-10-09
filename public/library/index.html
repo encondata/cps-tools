@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Library · CPS2 Tools</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash. Light is the default.
+    try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}
+  </script>
+</head>
+<body data-page="library" data-base="../">
+  <div class="page-title">
+    <h1>Library</h1>
+    <span class="sub">A central list of channels and contacts, shared by everyone using this server. Add them to any radio from the Zone and Contacts editors.</span>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" role="tab" data-type="channel">Channels <span id="countChannel" class="tab-count"></span></button>
+    <button class="tab" role="tab" data-type="contact">Contacts <span id="countContact" class="tab-count"></span></button>
+  </nav>
+
+  <main>
+    <section class="panel">
+      <div class="toolbar">
+        <div class="group">
+          <input id="libSearch" type="search" class="lib-search" placeholder="Search name, tags, frequency, notes…">
+        </div>
+        <div class="group">
+          <button id="importBtn" title="Add every channel or contact from pasted CPS2 XML">Import from XML&hellip;</button>
+          <button id="rrBtn" title="Create channels from a table copied from RadioReference">Import from RadioReference&hellip;</button>
+          <button id="buildBtn" title="Make CPS2 XML from the checked items">Use checked&hellip;</button>
+          <button id="delBtn" class="danger">Delete checked</button>
+          <div class="menu">
+            <button id="moreBtn" aria-haspopup="menu" aria-expanded="false">Backup &#9662;</button>
+            <div id="moreMenu" class="menu-list" role="menu" hidden>
+              <button role="menuitem" id="exportBtn">Export library (JSON)</button>
+              <label role="menuitem" class="button ghost menu-file">Import library (JSON)<input id="importFile" type="file" accept=".json,application/json" hidden></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="libMsg" class="msg" hidden></div>
+      <div class="grid-wrap">
+        <table id="libTable" class="grid lib-grid"></table>
+      </div>
+      <p class="muted small">Name, tags and notes can be edited in place. Channel settings are edited in a radio's Zone editor and saved back with Functions → Save Channels to Library.</p>
+    </section>
+  </main>
+
+  <dialog id="importDialog" class="dialog dialog-wide">
+    <form method="dialog">
+      <h3>Import from CPS2 XML</h3>
+      <p class="dialog-desc">Paste Zone XML (every channel in every zone is imported) or Contacts XML.</p>
+      <textarea id="importText" spellcheck="false" placeholder="Paste XML copied from CPS2…"></textarea>
+      <label class="dialog-field"><span>Tags (comma separated, optional)</span><input id="importTags" type="text" placeholder="e.g. Retail, UHF"></label>
+      <label class="dialog-field"><span>If the name is already in the library</span>
+        <select id="importConflict">
+          <option value="replace">Replace the library copy</option>
+          <option value="skip">Keep the library copy (skip)</option>
+          <option value="keep">Keep both (save with a new name)</option>
+        </select>
+      </label>
+      <div id="importError" class="msg error" hidden></div>
+      <div class="dialog-actions">
+        <button type="button" id="importCancel">Cancel</button>
+        <button type="button" id="importGo" class="primary">Import</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="rrDialog" class="dialog dialog-xwide">
+    <form method="dialog">
+      <h3>Import from RadioReference</h3>
+      <p class="dialog-desc">On a RadioReference page, select the frequency table (including the header row), copy it and paste it here.
+        DMR rows become digital channels and FM/FMN rows become analog channels.</p>
+      <textarea id="rrText" spellcheck="false" placeholder="Frequency&#9;License&#9;Type&#9;Tone&#9;Alpha Tag&#9;Description&#9;Mode&#9;Tag&#10;…"></textarea>
+      <div class="rr-options">
+        <label class="dialog-field"><span>Channel name from</span>
+          <select id="rrNameFrom"><option value="alpha">Alpha Tag</option><option value="desc">Description</option></select></label>
+        <label class="dialog-field"><span>Tags (comma separated)</span><input id="rrTags" type="text" placeholder="e.g. Frisco ISD"></label>
+        <label class="dialog-field"><span>Analog channel template</span><select id="rrTplA"></select></label>
+        <label class="dialog-field"><span>Digital channel template</span><select id="rrTplD"></select></label>
+        <label class="dialog-field"><span>New talkgroup contact names</span><input id="rrTgName" type="text" value="TG {id}"></label>
+        <label class="dialog-field"><span>If the name is already in the library</span>
+          <select id="rrConflict">
+            <option value="skip">Keep the library copy (skip)</option>
+            <option value="replace">Replace the library copy</option>
+            <option value="keep">Keep both (save with a new name)</option>
+          </select></label>
+        <label class="dialog-check"><input id="rrOffset" type="checkbox" checked> <span>Set repeater TX from standard band offsets (UHF +5 MHz)</span></label>
+        <label class="dialog-check"><input id="rrContacts" type="checkbox" checked> <span>Create missing talkgroup contacts in the Library</span></label>
+      </div>
+      <div id="rrSummary" class="rr-summary"></div>
+      <div class="lib-picker-list rr-preview"><table id="rrPreview" class="lib-table"></table></div>
+      <div id="rrError" class="msg error" hidden></div>
+      <div class="dialog-actions">
+        <button type="button" id="rrCancel">Cancel</button>
+        <button type="button" id="rrGo" class="primary" disabled>Import</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="buildDialog" class="dialog">
+    <form method="dialog">
+      <h3 id="buildTitle"></h3>
+      <p id="buildDesc" class="dialog-desc"></p>
+      <label id="buildZoneRow" class="dialog-field"><span>Zone name</span><input id="buildZone" type="text" maxlength="16"></label>
+      <div class="dialog-actions dialog-actions-stack">
+        <button type="button" id="buildCopy" class="primary">Copy as CPS2 XML</button>
+        <button type="button" id="buildWs"></button>
+        <button type="button" id="buildCancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="../common.js"></script>
+  <script src="../grid.js"></script>
+  <script src="../libclient.js"></script>
+  <script src="../templates.js"></script>
+  <script src="../rrimport.js"></script>
+  <script src="library.js"></script>
+</body>
+</html>
