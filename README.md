@@ -87,9 +87,14 @@ RepeaterBook's terms don't allow its listings to be redistributed, so no repeate
 - **CSV:** or open a CHIRP CSV export from RepeaterBook (GMRS exports need a free RepeaterBook account).
 
 **Built-in presets:** a **GMRS Texas presets** group is always available, even with no RepeaterBook data loaded. It holds repeaters whose details come from their owners:
-- **Dallas 600:** 462.600 / 467.600, PL 141.3. This is Dallas County REACT's "DCR Channel 3", from [dallasreact.org](https://www.dallasreact.org/communications).
+- **Dallas 600:** 462.600 / 467.600, PL 141.3. This is Dallas County REACT's "DCR Channel 3".
+- **Dallas 675:** 462.675 / 467.675, PL 141.3. This is Dallas County REACT's "DCR Channel 1".
 
-Presets import into the GMRS DFW zone. If your pasted data also lists a preset, the pasted copy is skipped.
+Both come from [dallasreact.org](https://www.dallasreact.org/communications).
+
+Presets import into the GMRS DFW zone:
+- **Same repeater:** if your pasted data lists one with the same output and tones, the pasted copy is skipped.
+- **Name clash:** other pasted repeaters that would get a preset's name are numbered instead ("Dallas 675 2").
 
 Repeaters are sorted by county into regions. Each region becomes a tree group with its own zone and scan list:
 

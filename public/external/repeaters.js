@@ -30,6 +30,8 @@ const TX_PRESET_GROUPS = [{
   items: [
     { name: 'Dallas 600', rx: 462.6, tx: 467.6, wide: true, txSq: 'TPL', txTone: '141.3', rxSq: 'TPL', rxTone: '141.3',
       note: 'Dallas County REACT "DCR Channel 3" · downtown Dallas · PL 141.3' },
+    { name: 'Dallas 675', rx: 462.675, tx: 467.675, wide: true, txSq: 'TPL', txTone: '141.3', rxSq: 'TPL', rxTone: '141.3',
+      note: 'Dallas County REACT "DCR Channel 1" · PL 141.3' },
   ],
 }];
 
@@ -210,10 +212,16 @@ function toneLabel(t) { return t && t !== 'CSQ' ? t : 'CSQ'; }
 // Parsed rows -> tree groups (same shape as EXTERNAL_GROUPS).
 function repeaterGroups(rows) {
   const byRegion = new Map(TX_REGIONS.map((g) => [g.id, []]));
-  const presets = new Set(TX_PRESET_GROUPS.flatMap((g) => g.items.map((it) => `${it.name}|${it.rx.toFixed(3)}`)));
+  // A pasted row is the same repeater as a preset when the output and both
+  // tones match; other repeaters on the same output keep their own entries.
+  const presetItems = TX_PRESET_GROUPS.flatMap((g) => g.items);
+  const toneKey = (sq, tone, inv) => (sq === 'CSQ' ? 'CSQ' : `${sq}${tone}${inv ? 'I' : ''}`);
+  const presetKey = (rx, up, down) => `${Number(rx).toFixed(3)}|${toneKey(up.sq, up.tone, up.inv)}|${toneKey(down.sq, down.tone, down.inv)}`;
+  const presets = new Set(presetItems.map((it) =>
+    presetKey(it.rx, { sq: it.txSq, tone: it.txTone, inv: it.txInv }, { sq: it.rxSq, tone: it.rxTone, inv: it.rxInv })));
   for (const r of rows) {
-    if (presets.has(`${repeaterName(r)}|${Number(r.freq).toFixed(3)}`)) continue; // already built in
     const up = parseTone(r.up), down = parseTone(r.down);
+    if (presets.has(presetKey(r.freq, up, down))) continue; // already built in
     const offAir = /off/i.test(r.status || '');
     const restricted = /CLOSED|PRIVATE/i.test(r.use || '');
     byRegion.get(regionOf(r).id).push({
@@ -232,7 +240,9 @@ function repeaterGroups(rows) {
   }
   return TX_REGIONS.filter((g) => byRegion.get(g.id).length).map((g) => {
     const items = byRegion.get(g.id).sort((a, b) => a.name.localeCompare(b.name));
-    uniquifyNames(items.map((it) => { it.notes = []; return it; }));
+    // Presets share the DFW zone, so pasted repeaters must not reuse their names.
+    const seed = presetItems.map((p) => ({ name: p.name, notes: [] }));
+    uniquifyNames([...seed, ...items.map((it) => { it.notes = []; return it; })]);
     return {
       id: `txgmrs-${g.id}`,
       label: `GMRS ${g.label}`,
