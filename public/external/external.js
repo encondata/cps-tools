@@ -13,11 +13,15 @@ const ui = {
   zoneName: new Map(),   // group id -> zone / scan list name
 };
 
-for (const g of EXTERNAL_GROUPS) {
+let repeaterGroupsLoaded = []; // from the user's RepeaterBook data (repeaters.js)
+const allGroups = () => [...EXTERNAL_GROUPS, ...repeaterGroupsLoaded];
+
+function initGroupState(g) {
   ui.selected.set(g.id, new Set());
   ui.rxOnly.set(g.id, g.rxOnlyDefault);
   ui.zoneName.set(g.id, g.zone);
 }
+EXTERNAL_GROUPS.forEach(initGroupState);
 
 const defaultItems = (g) => g.items.map((it, i) => (it.off ? -1 : i)).filter((i) => i >= 0);
 const txOf = (it) => it.tx ?? it.rx;
@@ -42,7 +46,7 @@ function groupCheckbox(g) {
 
 /* ---------------------------- Receive only ------------------------------ */
 
-const txGroups = () => EXTERNAL_GROUPS.filter((g) => !g.rxOnlyForced);
+const txGroups = () => allGroups().filter((g) => !g.rxOnlyForced);
 let txConfirmed = false;
 
 // Transmitting on these services needs certified radios (and a GMRS licence),
@@ -91,7 +95,7 @@ function renderGroup(g) {
     groupCheckbox(g),
     h('button', { class: 'ext-label', onclick: () => { open ? ui.expanded.delete(g.id) : ui.expanded.add(g.id); render(); } },
       h('strong', {}, g.label), h('span', { class: 'muted' }, ` ${g.title}`)),
-    h('span', { class: 'ext-count' }, sel.size ? `${sel.size} of ${g.items.length} selected` : `${g.items.length} channels`),
+    h('span', { class: 'ext-count' }, sel.size ? `${sel.size} of ${g.items.length} selected` : plural(g.items.length, 'channel')),
     rxOnlySwitch(g),
     h('a', { href: g.source.url, target: '_blank', rel: 'noopener', class: 'small' }, g.source.name));
 
@@ -112,6 +116,7 @@ function renderGroup(g) {
       h('td', { class: 'num-cell' }, mhz(it.rx)),
       h('td', { class: 'num-cell' }, rx ? h('span', { class: 'muted' }, '—') : txOf(it) === it.rx ? 'simplex' : mhz(txOf(it))),
       h('td', {}, it.wide ? '25' : '12.5'),
+      h('td', { class: 'num-cell small' }, toneText(it)),
       h('td', { class: 'small' },
         rx ? h('span', { class: 'badge ok' }, 'RX only') : null,
         it.low && !rx ? h('span', { class: 'badge warn' }, 'Low power') : null,
@@ -123,18 +128,26 @@ function renderGroup(g) {
       h('div', { class: 'ext-opts' },
         h('label', { class: 'dialog-field' }, h('span', {}, 'Zone & scan list name'), zoneInput)),
       h('table', { class: 'lib-table ext-items' },
-        h('thead', {}, h('tr', {}, ['', 'Name', 'RX MHz', 'TX MHz', 'kHz', 'Notes'].map((t) => h('th', {}, t)))),
+        h('thead', {}, h('tr', {}, ['', 'Name', 'RX MHz', 'TX MHz', 'kHz', 'Tone TX / RX', 'Notes'].map((t) => h('th', {}, t)))),
         h('tbody', {}, rows))));
+}
+
+// "141.3 / 141.3", "D627 / D156", "—" for carrier squelch.
+function toneText(it) {
+  const t = (sq, tone, inv) => (sq === 'TPL' ? tone : sq === 'DPL' ? `D${tone}${inv ? 'I' : ''}` : 'CSQ');
+  if (!it.txSq && !it.rxSq) return '—';
+  return `${t(it.txSq, it.txTone, it.txInv)} / ${t(it.rxSq, it.rxTone, it.rxInv)}`;
 }
 
 function render() {
   $('tree').replaceChildren(...EXTERNAL_GROUPS.map(renderGroup));
+  $('rbTree').replaceChildren(...repeaterGroupsLoaded.map(renderGroup));
   renderTxMaster();
   updateSummary();
 }
 
 function chosenGroups() {
-  return EXTERNAL_GROUPS.filter((g) => ui.selected.get(g.id).size);
+  return allGroups().filter((g) => ui.selected.get(g.id).size);
 }
 
 function validate() {
@@ -214,7 +227,10 @@ async function doImport() {
 
     const sets = items.map((it, i) => {
       const rxOnly = !!(g.rxOnlyForced || ui.rxOnly.get(g.id) || it.rxOnly);
-      const set = buildChannelSet({ name: it.name, rx: it.rx, tx: txOf(it), kind: 'analog', wide: !!it.wide, sq: 'CSQ' }, tpl, null);
+      const set = buildChannelSet({
+        name: it.name, rx: it.rx, tx: txOf(it), kind: 'analog', wide: !!it.wide, sq: 'CSQ',
+        txSq: it.txSq, txTone: it.txTone, txInv: it.txInv, rxSq: it.rxSq, rxTone: it.rxTone, rxInv: it.rxInv,
+      }, tpl, null);
       const list = listNames[Math.floor(i / perList)];
       setField(set, 'CP_RXONLYEN', rxOnly ? 'True' : 'False');
       setField(set, 'CP_TALKAROUNDEN', 'False');
@@ -269,15 +285,56 @@ async function doImport() {
   toast(`Imported ${plural(libItems.length, 'channel')} into ${plural(report.length, 'zone')}.`, 4000);
 }
 
+/* --------------------------- Texas GMRS loader --------------------------- */
+
+const RB_STORE = 'cps2tools.txgmrs.v1';
+
+function loadRepeaters(text, { quiet = false } = {}) {
+  const rows = text.trim() ? parseRepeaterText(text) : [];
+  if (text.trim() && !rows.length) {
+    showMsg('rbMsg', "No GMRS repeaters found. Paste the table from RepeaterBook's Texas GMRS page, or a CHIRP CSV export.", 'error');
+    return;
+  }
+  // Drop state for previously loaded groups, then add the new ones.
+  for (const g of repeaterGroupsLoaded) { ui.selected.delete(g.id); ui.rxOnly.delete(g.id); ui.zoneName.delete(g.id); ui.expanded.delete(g.id); }
+  repeaterGroupsLoaded = repeaterGroups(rows);
+  repeaterGroupsLoaded.forEach(initGroupState);
+  // New groups follow the master "Allow transmit" choice.
+  const anyTx = EXTERNAL_GROUPS.some((g) => !g.rxOnlyForced && !ui.rxOnly.get(g.id));
+  if (anyTx) repeaterGroupsLoaded.forEach((g) => ui.rxOnly.set(g.id, false));
+  try { if (text.trim()) localStorage.setItem(RB_STORE, text); else localStorage.removeItem(RB_STORE); } catch { /* storage unavailable */ }
+  $('rbCredit').hidden = !rows.length;
+  $('rbClear').hidden = !rows.length;
+  if (!quiet) {
+    showMsg('rbMsg', rows.length
+      ? `Loaded ${plural(rows.length, 'repeater')} into ${plural(repeaterGroupsLoaded.length, 'region')}: `
+        + repeaterGroupsLoaded.map((g) => `${g.label.replace(/^GMRS /, '')} (${g.items.length})`).join(', ')
+      : '', 'ok');
+  }
+  render();
+}
+
+$('rbLoad').addEventListener('click', () => loadRepeaters($('rbText').value));
+$('rbFile').addEventListener('change', async (e) => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if (f) { $('rbText').value = await f.text(); loadRepeaters($('rbText').value); }
+});
+$('rbClear').addEventListener('click', () => { $('rbText').value = ''; showMsg('rbMsg', ''); loadRepeaters(''); });
+
 /* -------------------------------- Wiring -------------------------------- */
 
 initShell();
 fillTemplates();
-$('expandAll').addEventListener('click', () => { EXTERNAL_GROUPS.forEach((g) => ui.expanded.add(g.id)); render(); });
+$('expandAll').addEventListener('click', () => { allGroups().forEach((g) => ui.expanded.add(g.id)); render(); });
 $('collapseAll').addEventListener('click', () => { ui.expanded.clear(); render(); });
-$('selectAll').addEventListener('click', () => { EXTERNAL_GROUPS.forEach((g) => ui.selected.set(g.id, new Set(defaultItems(g)))); render(); });
-$('selectNone').addEventListener('click', () => { EXTERNAL_GROUPS.forEach((g) => ui.selected.set(g.id, new Set())); render(); });
+$('selectAll').addEventListener('click', () => { allGroups().forEach((g) => ui.selected.set(g.id, new Set(defaultItems(g)))); render(); });
+$('selectNone').addEventListener('click', () => { allGroups().forEach((g) => ui.selected.set(g.id, new Set())); render(); });
 $('optScanMax').addEventListener('input', updateSummary);
 $('optAllowTx').addEventListener('change', (e) => setRxOnly(txGroups(), !e.target.checked));
 $('importBtn').addEventListener('click', doImport);
 render();
+try {
+  const saved = localStorage.getItem(RB_STORE);
+  if (saved) { $('rbText').value = saved; loadRepeaters(saved, { quiet: true }); }
+} catch { /* storage unavailable */ }

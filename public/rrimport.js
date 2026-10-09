@@ -125,10 +125,16 @@ function buildChannelSet(spec, templateXml, contactName) {
     setField(set, 'CP_UKPPERS', contactName || 'NONE', contactName || 'None');
   } else {
     setField(set, 'CP_CHNLBWDTH', spec.wide ? 'STR_25KHZ' : 'STR_12PT5KHZ', spec.wide ? '25' : '12.5');
-    for (const [type, toneF, dplF] of [['CP_XSQCHTY', 'CP_RXTPLFREQ', 'CP_RXDPLCD'], ['CP_TXSQCHTY', 'CP_TXTTPLFREQ', 'CP_TXTDPLCD']]) {
-      setField(set, type, spec.sq);
-      if (spec.sq === 'TPL') setField(set, toneF, spec.toneVal);
-      if (spec.sq === 'DPL') setField(set, dplF, spec.toneVal);
+    // RX and TX signalling can differ (e.g. a repeater's uplink vs downlink
+    // tone); spec.rx* / spec.tx* override the shared spec.sq / spec.toneVal.
+    const dirs = [
+      ['CP_XSQCHTY', 'CP_RXTPLFREQ', 'CP_RXDPLCD', 'CP_RXDPLINV', spec.rxSq ?? spec.sq, spec.rxTone ?? spec.toneVal, spec.rxInv],
+      ['CP_TXSQCHTY', 'CP_TXTTPLFREQ', 'CP_TXTDPLCD', 'CP_TXDPLINV', spec.txSq ?? spec.sq, spec.txTone ?? spec.toneVal, spec.txInv],
+    ];
+    for (const [type, toneF, dplF, invF, sq, tone, inv] of dirs) {
+      setField(set, type, sq || 'CSQ');
+      if (sq === 'TPL') setField(set, toneF, tone);
+      if (sq === 'DPL') { setField(set, dplF, tone); setField(set, invF, inv ? 'True' : 'False'); }
     }
   }
   return set;

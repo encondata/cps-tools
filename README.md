@@ -12,7 +12,7 @@ Editing happens in the browser. The only data sent to the server is what you sav
 | --- | --- | --- |
 | Setup | `/setup/` | The shared workspace: paste everything once |
 | Library | `/library/` | Central, server-side list of channels and contacts |
-| Load External | `/external/` | Preconfigured FRS, GMRS, MURS, Marine and NOAA Weather channels |
+| Load External | `/external/` | Preconfigured FRS, GMRS, MURS, Marine and NOAA Weather channels, plus Texas GMRS repeaters from your RepeaterBook data |
 | Zones | `/zone/` | A zone and its channels |
 | Scan Lists | `/scan/` | Scan list settings and member channels |
 | RX Group Lists | `/rxgroup/` | Digital RX Group Lists and their member contacts |
@@ -79,6 +79,28 @@ A tree of preconfigured channel groups. Expand a group to see every channel with
 - **Library:** optionally, the channels are also saved to the Library.
 
 Copy both Zones and Scan Lists into CPS2 afterwards.
+
+### Texas GMRS repeaters
+
+RepeaterBook's terms don't allow its listings to be redistributed, so no repeater data ships with this app. Load your own copy instead:
+- **Table:** open RepeaterBook's [Texas GMRS repeater list](https://www.repeaterbook.com/gmrs/Display_SS.php?state_id=48), select the table from the header to the last row, copy, and paste it into **Texas GMRS repeaters**.
+- **CSV:** or open a CHIRP CSV export from RepeaterBook (GMRS exports need a free RepeaterBook account).
+
+Repeaters are sorted by county into regions. Each region becomes a tree group with its own zone and scan list:
+
+| Group | Zone | Counties |
+| --- | --- | --- |
+| DFW | GMRS DFW | Dallas, Tarrant, Collin, Denton, Rockwall, Kaufman, Parker, Wise, Johnson, Ellis |
+| I-45 corridor | GMRS I-45 | Navarro, Freestone, Leon, Madison, Walker, Limestone, Anderson, Houston |
+| Montgomery / Conroe | GMRS Conroe | Montgomery, San Jacinto, Grimes |
+| Sugar Land / Fort Bend | GMRS Sugar Land | Fort Bend, Waller, Wharton, Austin |
+| Houston | GMRS Houston | Harris, Galveston, Brazoria, Chambers, Liberty |
+| Austin | GMRS Austin | Travis, Williamson, Hays, Bastrop, Caldwell, Burnet |
+| I-35 corridor | GMRS I-35 | Hill, McLennan, Bell, Coryell, Falls, Bosque, Milam, Lampasas |
+| San Antonio / I-35 south | GMRS San Antonio | Bexar, Comal, Guadalupe, Kendall, Medina, Bandera, Kerr, Wilson |
+| Other Texas | GMRS Texas | everything else |
+
+Channels are named after the city and output, for example "Montgomery 600". Each channel receives on the output with the downlink tone and transmits 5 MHz up with the uplink tone, so split tones such as D627 / D156 are kept. A blank tone means carrier squelch. Receive-only defaults and the TX switches work as for the other groups. Off-air, closed and private repeaters start unticked. The pasted data stays in your browser and is restored when you come back. Data courtesy of [RepeaterBook.com](https://www.repeaterbook.com).
 
 ## Library (central channel and contact list)
 
@@ -165,7 +187,7 @@ The Zone editor's Copy tab copies only the zone being edited by default. Untick 
 | `public/index.html` | Home page |
 | `server/server.js` | Node.js server: static files and the Library API (SQLite) |
 | `public/libclient.js` | Library API client, summaries, picker and save dialogs |
-| `public/external/` | Load from External page and its channel data (`data.js`) |
+| `public/external/` | Load from External page, its channel data (`data.js`) and the Texas GMRS repeater loader (`repeaters.js`) |
 | `public/builders.js` | Shared zone and scan list builders |
 | `public/rrimport.js`, `public/templates.js` | RadioReference parser and channel builder, and built-in CPS2 channel and contact templates |
 | `public/library/` | Library page |
