@@ -133,6 +133,7 @@ const regionById = new Map(TX_REGIONS.map((g) => [g.id, g]));
 // County decides (Comptroller regions). Without one (CHIRP exports), look for
 // a known city in the location text; anything else goes to "unsorted".
 function regionOf(r) {
+  if (r.region) return r.region;
   let county = (r.county || '').replace(/\s*County$/i, '').trim().toLowerCase();
   if (!county) {
     const text = `${r.loc || ''} ${r.comment || ''}`.toLowerCase();
@@ -153,8 +154,8 @@ const toneLabel = (t) => t || '—';
 const toneKey = (t) => { const p = parseTone(t); return p.sq === 'CSQ' ? 'CSQ' : `${p.sq}${p.tone}${p.inv ? 'I' : ''}`; };
 
 // Built-in rows in the same shape as parsed ones.
-const presetRows = () => TX_PRESET_ROWS.map(([ch, name, loc, county, call, up, down, flags, src]) => ({
-  freq: `462.${ch}`, tx: Number(`467.${ch}`), name, loc, county, call, up, down,
+const presetRows = () => TX_PRESET_ROWS.map(([ch, name, loc, county, call, up, down, flags, src, region]) => ({
+  freq: `462.${ch}`, tx: Number(`467.${ch}`), name, loc, county, call, up, down, region,
   use: /closed/.test(flags) ? 'CLOSED' : 'OPEN',
   status: /off/.test(flags) ? 'Off-Air' : /testing/.test(flags) ? 'Testing' : '',
   src, preset: true,
@@ -177,7 +178,7 @@ function repeaterItem(r) {
     // Without a published uplink tone the repeater can't be keyed up: receive only.
     rxOnly: !r.up || r.up === 'CSQ' ? true : undefined,
     off: offAir || restricted || unverified,
-    note: [r.call, [r.loc, r.county && `${r.county} Co.`].filter(Boolean).join(', '),
+    note: [r.call, [r.loc, r.county && (/,/.test(r.county) ? `${r.county.replace(',', ' Co.,')}` : `${r.county} Co.`)].filter(Boolean).join(', '),
       `up ${toneLabel(r.up)} / down ${toneLabel(r.down)}`,
       r.use && r.use !== 'OPEN' ? r.use.toLowerCase() : '', offAir ? 'OFF-AIR' : (/testing/i.test(r.status || '') ? 'testing' : ''),
       !r.up ? 'uplink tone not published' : '',

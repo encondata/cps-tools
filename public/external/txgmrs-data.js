@@ -89,7 +89,8 @@ const TX_CITY_COUNTY = {
   'waco': 'McLennan', 'weatherford': 'Parker', 'wichita falls': 'Wichita',
 };
 
-// [channel, name (<= 16 chars), location, county, call, uplink tone, downlink tone, flags, source]
+// [channel, name (<= 16 chars), location, county, call, uplink tone, downlink tone, flags, source, region]
+// region is only given for repeaters outside Texas; Texas ones are placed by county.
 // Tones: "141.3" (PL), "D503" (DPL), "" (not published), "CSQ" (carrier squelch).
 // Flags: closed, off (off-air), testing.
 const TX_PRESET_ROWS = [
@@ -138,6 +139,7 @@ const TX_PRESET_ROWS = [
   ['600', 'Dallas 600', 'Downtown Dallas, "DCR Channel 3"', 'Dallas', 'WQXR714', '141.3', '141.3', '', 'react'],
   ['600', 'Alvin 600', 'Alvin', 'Brazoria', '', '141.3', '141.3', '', 'hams'],
   ['600', 'Fairfield 600', 'Fairfield (NFLARC)', 'Freestone', 'WSHG319', '136.5', '', '', 'user'],
+  ['600', 'Las Cruces 600', 'Las Cruces, NM (about 45 mi from El Paso)', 'Doña Ana, NM', 'WRKF200', '210.7', '210.7', '', 'rb', 'farwest'],
   ['600', 'Atlas 600', 'Atlas, Lamar County (RRVARC)', 'Lamar', '', '88.5', '88.5', '', 'user'],
   // 462.625 – GMRS 18R
   ['625', 'Brookston 625', 'Brookston', 'Lamar', 'WRFC958', '136.5', '', '', 'rb'],

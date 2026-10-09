@@ -12,7 +12,7 @@ Editing happens in the browser. The only data sent to the server is what you sav
 | --- | --- | --- |
 | Setup | `/setup/` | The shared workspace: paste everything once |
 | Library | `/library/` | Central, server-side list of channels and contacts |
-| Load External | `/external/` | Preconfigured FRS, GMRS, MURS, Marine and NOAA Weather channels, plus 114 Texas GMRS repeaters by region |
+| Load External | `/external/` | Preconfigured FRS, GMRS, MURS, Marine and NOAA Weather channels, plus 115 Texas GMRS repeaters by region |
 | Zones | `/zone/` | A zone and its channels |
 | Scan Lists | `/scan/` | Scan list settings and member channels |
 | RX Group Lists | `/rxgroup/` | Digital RX Group Lists and their member contacts |
@@ -82,7 +82,7 @@ Copy both Zones and Scan Lists into CPS2 afterwards.
 
 ### Texas GMRS repeaters
 
-114 built-in Texas GMRS repeaters, sorted into the Texas Comptroller's [12 economic regions](https://comptroller.texas.gov/economy/economic-data/regions/), which assign every county. Each region is a tree group with its own zone and scan list:
+115 built-in GMRS repeaters for Texas, sorted into the Texas Comptroller's [12 economic regions](https://comptroller.texas.gov/economy/economic-data/regions/), which assign every county. Each region is a tree group with its own zone and scan list:
 
 | Group | Zone | Covers | Repeaters |
 | --- | --- | --- | --- |
@@ -97,13 +97,15 @@ Copy both Zones and Scan Lists into CPS2 afterwards.
 | Alamo (San Antonio) | GMRS San Antonio | San Antonio, New Braunfels, Hill Country, Victoria | 18 |
 | South Texas | GMRS South TX | Corpus Christi, Laredo, Rio Grande Valley | 6 |
 | West Texas | GMRS West TX | Midland, Odessa, San Angelo | 4 |
-| Far West Texas | GMRS Far West | El Paso, Big Bend | 0 |
+| Far West Texas | GMRS Far West | El Paso, Big Bend | 1 |
+
+RepeaterBook lists no GMRS repeaters in Far West Texas itself. That group holds the nearest one, Las Cruces 600 in New Mexico, about 45 miles from El Paso. Its coverage into El Paso isn't confirmed.
 
 Sources, checked 2026-10-09:
 
 | Source | Repeaters | How it was checked |
 | --- | --- | --- |
-| [RepeaterBook.com](https://www.repeaterbook.com/gmrs/Display_SS.php?state_id=48) | 95 | Every row matched against the live Texas listing: output, call sign, both tones, county and status |
+| [RepeaterBook.com](https://www.repeaterbook.com/gmrs/Display_SS.php?state_id=48) | 96 | Every row matched against the live Texas listing: output, call sign, both tones, county and status. Las Cruces 600 is from the New Mexico listing |
 | [Dallas County REACT](https://www.dallasreact.org/communications) | Dallas 600, Dallas 675 | Owner's page |
 | [Houston Amateur Mobile Society](https://www.qsl.net/hams/repeaters.html) | Texas City 550, Angleton 575, Alvin 600, Danbury 625, Santa Fe 725 | Owner's page |
 | Supplied list, unverified | SAGMRS (6), Fairfield 600, Atlas 600, Geforce 675, Freedom 650, Citywide 700, Big Blue 725 | No published source found. Shown with an "unverified" note and unticked |
