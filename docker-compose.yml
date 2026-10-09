@@ -4,7 +4,7 @@ services:
     image: cps2-zone-editor:latest
     container_name: cps2-zone-editor
     ports:
-      - "5974:8080"
+      - "${CPS2_PORT:-8734}:8080"
     volumes:
       - cps2-library:/data   # the channel/contact library database
     restart: unless-stopped

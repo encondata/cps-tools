@@ -18,24 +18,45 @@ Editing happens in the browser. The only data sent to the server is what you sav
 | RX Group Lists | `/rxgroup/` | Digital RX Group Lists and their member contacts |
 | Contacts | `/contacts/` | Contacts and their Digital, MDC and Quik-Call II entries |
 
-## Run it
+## Install (Unraid or any Linux server with Docker)
+
+Copy the project folder to the server, or clone it from GitHub, then run the installer as root:
 
 ```bash
-docker compose up -d --build
+bash install.sh
 ```
 
-Then open http://localhost:5974, or http://<host-ip>:5974 from another PC.
+It asks for two things:
 
-The app files are copied into the image, so re-run the command above after any change.
+- **Install folder** (default `/mnt/user/cps2xml`): the app code goes in `app/` and the Library database in `data/library.db`.
+- **Web port** (default `8734`).
 
-The container runs a small Node.js server (`server/server.js`) that serves the app and the Library API. The Library is a SQLite database in the `cps2-library` Docker volume, at `/data/library.db` inside the container. Rebuilding or recreating the container keeps it. To back it up, use **Library → Backup → Export library**, or copy the volume.
+It then builds the `cps2-tools` image, starts the container (restarting automatically), and waits until it answers. On Unraid the container shows in the Docker tab with a WebUI link. Open `http://<server-ip>:8734/` when it's done.
 
-There is no login. Anyone who can reach port 5974 can read and change the Library, so keep it on a trusted network.
+| Task | Command |
+| --- | --- |
+| Install with defaults, no questions | `bash install.sh -y` |
+| Choose folder and port | `bash install.sh -d /mnt/user/appdata/cps2 -p 9000` |
+| Install or update straight from GitHub | `bash install.sh --repo https://github.com/<you>/cps2-tools.git` |
+| Update after changing the code | re-run `<install folder>/app/install.sh`. The Library data is kept |
+| Uninstall (asks before deleting data) | `bash <install folder>/app/install.sh --uninstall` |
 
-To run it without Docker (Node 22.13 or newer):
+Back up `<install folder>/data/library.db`, or use **Library → Backup → Export library**.
+
+The container runs a small Node.js server (`server/server.js`) that serves the app and the Library API (SQLite). There is no login: anyone who can reach the port can read and change the Library, so keep it on a trusted network.
+
+### Other ways to run it
+
+With Docker Compose (the Library lives in the `cps2-library` volume):
 
 ```bash
-node server/server.js --port 5974 --db ./data/library.db
+CPS2_PORT=8734 docker compose up -d --build
+```
+
+Without Docker (Node 22.13 or newer):
+
+```bash
+node server/server.js --port 8734 --db ./data/library.db
 ```
 
 ## Load from External
@@ -153,4 +174,5 @@ The Zone editor's Copy tab copies only the zone being edited by default. Untick 
 | `public/lists.js` | Shared Scan List / RX Group List editor |
 | `public/setup/` | Setup / workspace page |
 | `public/zone/`, `scan/`, `rxgroup/`, `contacts/` | Editor pages, each with a `sample.xml` |
-| `Dockerfile`, `docker-compose.yml` | Node.js container, published on port 5974, with the `cps2-library` data volume |
+| `install.sh` | Installer: builds the image and runs the container (default `/mnt/user/cps2xml`, port 8734) |
+| `Dockerfile`, `docker-compose.yml` | Node.js container image, and a Compose alternative to the installer |
